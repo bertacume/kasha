@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default class HomeScreen extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Home</Text>
+    <View style={styles.container}>
+        <Text>Roll</Text>
       </View>
     );
   }
@@ -18,4 +18,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  slideDefault: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue'
+  },
+  text: {
+    color: 'rgb(255,255,255)'
+  }
 });

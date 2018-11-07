@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation';
 import HomeScreen from '../components/screens/HomeScreen';
 import RollScreen from '../components/screens/RollScreen';
 import CamScreen from '../components/screens/CamScreen';
@@ -36,10 +36,11 @@ export default createBottomTabNavigator({
   initialRouteName: 'Home',
   order: ['Roll', 'Home', 'Cam'],
   navigationOptions: {
-    tabBarVisible: true, //Set to true by default
+    tabBarVisible: true,
   },
   tabBarOptions: {
     activeTintColor: '#7ae2ba',
-    inactiveTintColor: 'grey'
+    inactiveTintColor: 'grey',
+    showLabel: false
   }
 });
