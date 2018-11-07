@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Camera, Permissions } from 'expo';
+import { Camera, Permissions, FileSystem } from 'expo';
 import { Header, Icon } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -11,7 +11,7 @@ export default class HomeScreen extends Component {
     focusedScreen: true
   };
 
-  async componentDidMount() {
+  async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
 
@@ -24,9 +24,32 @@ export default class HomeScreen extends Component {
     );
   }
 
+  componentDidMount() {
+    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
+      console.log(e, 'Directory exists');
+    });
+  }
+
+  
+  takePicture = () => {
+    if (this.camera) {
+      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
+    }
+  };
+
+  onPictureSaved = async photo => {
+    console.log(photo);
+    await FileSystem.moveAsync({
+      from: photo.uri,
+      to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
+    });
+    console.log(photo);
+    this.setState({ newPhotos: true });
+  }
+
   renderCamera() {
     return (
-        <Camera style={{ flex: 1 }} type={this.state.type}>
+        <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}}>
           <Header style={styles.header}>
             <View style={styles.headerView}>
               <Text style={styles.text}>Back</Text>
@@ -40,7 +63,9 @@ export default class HomeScreen extends Component {
           </Header>
           <View style={styles.content}>
             <View style={styles.bottomIcons}>
-              <MaterialCommunityIcons name="camera-iris" style={styles.takePicBtn}></MaterialCommunityIcons>
+            <TouchableOpacity onPress={this.takePicture}>
+              <MaterialCommunityIcons name="camera-iris" style={styles.takePicBtn} />
+            </TouchableOpacity>
             </View>
           </View>
         </Camera>
