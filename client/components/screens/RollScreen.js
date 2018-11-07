@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Image, Text, Dimensions, FlatList } from 'react-native';
 import { FileSystem } from 'expo';
 import ImageItem from '../presentational/ImageItem';
 import { connect } from 'react-redux';
@@ -29,7 +29,13 @@ class RollScreen extends Component {
       <View style={styles.container}>
         <Text>Roll:</Text>
         <View style={styles.wraper}>
-          {this.props.pictures ? this.props.pictures.map(this.renderPhoto): <Text>Loading...</Text>}
+          <FlatList
+            numColumns={3}
+            data={this.props.pictures}
+            extraData={this.state}
+            keyExtractor={(item, index) => item}
+            renderItem={({ item, separators }) => this.renderPhoto(item)}
+          />
         </View>
       </View>
     );
