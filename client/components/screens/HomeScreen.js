@@ -5,7 +5,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
     <View style={styles.container}>
-        <Text>Roll</Text>
+        <Text>Welcome</Text>
       </View>
     );
   }

@@ -43,8 +43,6 @@ export default class HomeScreen extends Component {
       from: photo.uri,
       to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
     });
-    console.log(photo);
-    this.setState({ newPhotos: true });
   }
 
   renderCamera() {
