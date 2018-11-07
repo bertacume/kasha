@@ -1,12 +1,12 @@
 import React from 'react';
-import { createBottomTabNavigator } from 'react-navigation';
+import { createTabNavigator } from 'react-navigation';
 import HomeScreen from '../components/screens/HomeScreen';
 import RollScreen from '../components/screens/RollScreen';
 import CamScreen from '../components/screens/CamScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
-export default createBottomTabNavigator({
+export default createTabNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
       tabBarLabel: 'Home',
@@ -35,12 +35,21 @@ export default createBottomTabNavigator({
 }, {
   initialRouteName: 'Home',
   order: ['Roll', 'Home', 'Cam'],
+  swipeEnabled: true,
+  tabBarPosition: 'bottom',
   navigationOptions: {
-    tabBarVisible: true,
+    tabBarVisible: false,
   },
   tabBarOptions: {
     activeTintColor: '#7ae2ba',
     inactiveTintColor: 'grey',
-    showLabel: false
+    showLabel: false,
+    showIcon: false,
+    style: {
+      backgroundColor: 'transparent' // TabBar background
+    },
+    indicatorStyle: {
+      opacity: 0
+    }
   }
 });
