@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 import { FileSystem } from 'expo';
-import ImageItem from '../container/ImageItem';
+import ImageItem from '../presentational/ImageItem';
+import { connect } from 'react-redux';
+import { fetchPictures } from '../../actions/actions';
 
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
 
-export default class RollScreen extends Component {
+class RollScreen extends Component {
   state = {
     photos: []
   };
 
-  componentDidMount = async () => {
-    const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.setState({ photos });
+  componentWillMount = async () => {
+    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
+    this.props.fetchPictures(pics);
   };
 
   renderPhoto = fileName => {
@@ -27,12 +29,22 @@ export default class RollScreen extends Component {
       <View style={styles.container}>
         <Text>Roll:</Text>
         <View style={styles.wraper}>
-          {this.state.photos.map(this.renderPhoto)}
+          {this.props.pictures ? this.props.pictures.map(this.renderPhoto): <Text>Loading...</Text>}
         </View>
       </View>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  pictures: state.pictures,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchPictures: (pictures) => dispatch(fetchPictures(pictures))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RollScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +61,7 @@ const styles = StyleSheet.create({
   },
   imageWrap: {
     margin: 2,
-    // padding: 2,
+    padding: 2,
     height: (Dimensions.get('window').height / 5) - 12,
     width: (Dimensions.get('window').width / 3) - 4,
     backgroundColor: '#62686d'

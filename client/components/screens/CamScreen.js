@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
-import { Header, Icon } from 'native-base';
+// import { Header, Icon } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from 'react-redux';
+import { fetchPictures } from '../../actions/actions';
 
-export default class HomeScreen extends Component {
+const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
+
+class CamScreen extends Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
@@ -14,14 +18,6 @@ export default class HomeScreen extends Component {
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
-
-    const { navigation } = this.props;
-    navigation.addListener('willFocus', () =>
-      this.setState({ focusedScreen: true })
-    );
-    navigation.addListener('willBlur', () =>
-      this.setState({ focusedScreen: false })
-    );
   }
 
   componentDidMount() {
@@ -43,12 +39,14 @@ export default class HomeScreen extends Component {
       from: photo.uri,
       to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
     });
+    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
+    this.props.fetchPictures(pics);
   }
 
   renderCamera() {
     return (
         <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}}>
-          <Header style={styles.header}>
+          {/* <Header style={styles.header}>
             <View style={styles.headerView}>
               <Text style={styles.text}>Back</Text>
               <Text style={styles.text}>30/36</Text>
@@ -58,7 +56,7 @@ export default class HomeScreen extends Component {
                 })
               }} />
             </View>
-          </Header>
+          </Header> */}
           <View style={styles.content}>
             <View style={styles.bottomIcons}>
             <TouchableOpacity onPress={this.takePicture}>
@@ -76,13 +74,20 @@ export default class HomeScreen extends Component {
       return <View></View>
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>
-    } else if (focusedScreen) {
-      return this.renderCamera();
     } else {
-      return <View />;
-    }
+      return this.renderCamera();
+    } 
   }
 }
+
+const mapStateToProps = (state) => ({
+  pictures: state.pictures,
+});
+const mapDispatchToProps = (dispatch) => ({
+  fetchPictures: (pictures) => dispatch(fetchPictures(pictures))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CamScreen);
 
 const styles = StyleSheet.create({
   header: { 

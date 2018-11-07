@@ -46,7 +46,7 @@ export default createTabNavigator({
     showLabel: false,
     showIcon: false,
     style: {
-      backgroundColor: 'transparent' // TabBar background
+      backgroundColor: 'transparent'
     },
     indicatorStyle: {
       opacity: 0
