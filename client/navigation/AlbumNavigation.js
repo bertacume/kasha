@@ -12,7 +12,9 @@ const AlbumNavigation = createStackNavigator({
     navigationOptions: {
       title: 'Album',
     } 
-  },
-});
+  }},{
+    initialroutename: 'Roll'
+  }
+);
 
 export default AlbumNavigation;

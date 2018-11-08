@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import { fetchPictures } from '../../actions/actions';
+import { fetchPictures, incrementPicIndex } from '../../actions/actions';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
@@ -29,6 +29,7 @@ class CamScreen extends Component {
       from: photo.uri,
       to: `${PHOTOS_DIR}${this.props.currentAlbum}/${Date.now()}.jpg`,
     });
+    this.props.incrementPicIndex();
   }
   
   renderCamera() {
@@ -58,11 +59,12 @@ class CamScreen extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  pictures: state.pictures,
   currentAlbum: state.current_album,
+  picIndex: state.picIndex
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchPictures: (pictures) => dispatch(fetchPictures(pictures))
+  fetchPictures: (pictures) => dispatch(fetchPictures(pictures)),
+  incrementPicIndex: () => dispatch(incrementPicIndex())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CamScreen);

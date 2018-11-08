@@ -20,6 +20,14 @@ const reducers = (state = [], action) => {
       console.log('reducer render album', action.render_album);
       return {...state, render_album: action.render_album};
 
+    case types.SET_PIC_INDEX:
+      console.log('reducer set picIndex', action.picIndex);
+      return {...state, picIndex: action.picIndex};
+
+    case types.INCREMENT_PIC_INDEX:
+      console.log('reducer picIndex', state.picIndex);
+      return {...state, picIndex: state.picIndex + 1};
+
     default:
       return state;
   }

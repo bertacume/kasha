@@ -5,17 +5,19 @@ import { FileSystem } from 'expo';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AsyncStorage } from "react-native";
-import { updateCurrentAlbum } from '../../actions/actions';
+import { updateCurrentAlbum, setPicIndex } from '../../actions/actions';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
 class HomeScreen extends Component {
 
   async componentWillMount() {
-    this.retrieveCurrentAlbum();
+    await this.retrieveCurrentAlbum();
     await FileSystem.makeDirectoryAsync(PHOTOS_DIR).catch(e => {
       console.log(e, 'Directory exists');
     });
+    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.currentAlbum);
+    this.props.setPicIndex(pics.length);
   }
   
   handlePress = () => {
@@ -52,6 +54,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   updateCurrentAlbum: (album) => dispatch(updateCurrentAlbum(album)),
+  setPicIndex: (picIndex) => dispatch(setPicIndex(picIndex))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

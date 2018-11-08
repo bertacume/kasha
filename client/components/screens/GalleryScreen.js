@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
-import ImageList from '../container/ImageList';
+import ImageList from '../presentational/ImageList';
+import DevelopingList from '../presentational/DevelopingList';
 import { connect } from 'react-redux';
 
 class NewAlbumScreen extends Component {
 
   render() {
-    return (
-      <ImageList album={this.props.renderAlbum} />
-    );
+    if (this.props.renderAlbum === this.props.currentAlbum) {
+      return (
+        <DevelopingList album={this.props.renderAlbum} />
+      );
+    } else {
+      return (
+        <ImageList album={this.props.renderAlbum} />
+      );
+    }
   }
 }
 
 
 const mapStateToProps = (state) => ({
-  pictures: state.pictures,
   renderAlbum: state.render_album,
+  currentAlbum: state.current_album,
 });
 
 const mapDispatchToProps = (dispatch) => ({

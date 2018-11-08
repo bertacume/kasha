@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions, FlatList } from 'react-native';
 import { FileSystem } from 'expo';
-import ImageItem from '../presentational/ImageItem';
-
+import DevelopingItem from './DevelopingItem';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
@@ -14,12 +13,11 @@ export default class ImageList extends Component {
   componentWillMount = async () => {
     const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.album);
     this.setState({pictures: pics});
-    console.log('aaaaaaaaaa', this.state.pictures);
   };
 
   renderPhoto = fileName => {
     return <View key={fileName} style={styles.imageWrap}>
-      <ImageItem image={`${PHOTOS_DIR}${this.props.album}/${fileName}`} />
+      <DevelopingItem />
     </View>;
   }
 
@@ -54,6 +52,6 @@ const styles = StyleSheet.create({
     padding: 2,
     height: (Dimensions.get('window').height / 5) - 12,
     width: (Dimensions.get('window').width / 3) - 4,
-    backgroundColor: '#62686d'
+    backgroundColor: '#d5dae2'
   }
 });
