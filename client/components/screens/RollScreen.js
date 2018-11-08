@@ -13,7 +13,6 @@ class RollScreen extends Component {
 
   componentWillMount = async () => {
     const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    console.log('albums', albums);
     this.props.fetchAlbums(albums);
   };
 
@@ -22,10 +21,11 @@ class RollScreen extends Component {
   }
 
   renderAlbum = album => {
+    const albumName = album.slice(0, album.lastIndexOf("_"));
     return <TouchableHighlight onPress={this.handlePress} underlayColor="white">
       <View style={styles.row}>
         <Image source={{uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg'}} style={styles.thumbnail} />
-        <Text style={styles.title}>{album}</Text>
+        <Text style={styles.title}>{albumName}</Text>
         <Icon name='ios-arrow-forward' size={24} />
       </View>
       </TouchableHighlight>;

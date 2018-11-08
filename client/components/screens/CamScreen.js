@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
-// import { Header, Icon } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import { fetchPictures } from '../../actions/actions';
@@ -19,20 +18,6 @@ class CamScreen extends Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
-
-  async componentDidMount() {
-    // FileSystem.deleteAsync(PHOTOS_DIR);
-    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
-      console.log(e, 'Directory exists');
-    });
-    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos/uno').catch(e => {
-      console.log(e, 'Directory UNO exists');
-    });
-    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos/dos').catch(e => {
-      console.log(e, 'Directory DOS exists');
-    });
-  }
-
   
   takePicture = () => {
     if (this.camera) {
@@ -41,10 +26,9 @@ class CamScreen extends Component {
   };
 
   onPictureSaved = async photo => {
-    console.log(photo);
     await FileSystem.moveAsync({
       from: photo.uri,
-      to: `${FileSystem.documentDirectory}photos/uno/${Date.now()}.jpg`,
+      to: `${FileSystem.documentDirectory}photos/${this.props.currentAlbum}/${Date.now()}.jpg`,
     });
     const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.props.fetchPictures(pics);
@@ -53,17 +37,6 @@ class CamScreen extends Component {
   renderCamera() {
     return (
         <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}}>
-          {/* <Header style={styles.header}>
-            <View style={styles.headerView}>
-              <Text style={styles.text}>Back</Text>
-              <Text style={styles.text}>30/36</Text>
-              <Icon name='ios-reverse-camera' size={32} style={styles.icon} onPress={() => {
-                this.setState({
-                  type: this.state.type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
-                })
-              }} />
-            </View>
-          </Header> */}
           <View style={styles.content}>
             <View style={styles.bottomIcons}>
             <TouchableOpacity onPress={this.takePicture}>
@@ -89,6 +62,7 @@ class CamScreen extends Component {
 
 const mapStateToProps = (state) => ({
   pictures: state.pictures,
+  currentAlbum: state.current_album,
 });
 const mapDispatchToProps = (dispatch) => ({
   fetchPictures: (pictures) => dispatch(fetchPictures(pictures))
