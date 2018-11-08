@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 export default class HomeScreen extends Component {
   render() {
     return (
     <View style={styles.container}>
-        <Text>Welcome</Text>
-      </View>
+      <Text>Welcome</Text>
+      <Text>Create a new album: </Text>
+      <Icon name='ios-add-circle' size={40}/>
+    </View>
     );
   }
 }

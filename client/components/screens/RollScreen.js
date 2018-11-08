@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight } from 'react-native';
 import { FileSystem } from 'expo';
-import ImageItem from '../presentational/ImageItem';
 import { connect } from 'react-redux';
 import { fetchAlbums } from '../../actions/actions';
-import ImageList from '../container/ImageList';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -63,6 +61,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(RollScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 15,
     flexDirection: 'column',
   },
   wraper: {

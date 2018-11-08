@@ -7,12 +7,14 @@ import ImageList from '../components/container/ImageList';
 const AlbumNavigation = createStackNavigator({
   Roll: { screen: RollScreen,
     navigationOptions: {
-      title: 'Roll',
-    }},
+      header: null
+    }
+  },
   Album: { screen: ImageList,
     navigationOptions: {
       title: 'Album',
-    } },
+    } 
+  },
 });
 
 export default AlbumNavigation;
