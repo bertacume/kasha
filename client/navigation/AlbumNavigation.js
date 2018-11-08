@@ -1,8 +1,6 @@
-import {
-  createStackNavigator,
-} from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import RollScreen from '../components/screens/RollScreen';
-import ImageList from '../components/container/ImageList';
+import GalleryScreen from '../components/screens/GalleryScreen';
 
 const AlbumNavigation = createStackNavigator({
   Roll: { screen: RollScreen,
@@ -10,7 +8,7 @@ const AlbumNavigation = createStackNavigator({
       header: null
     }
   },
-  Album: { screen: ImageList,
+  Album: { screen: GalleryScreen,
     navigationOptions: {
       title: 'Album',
     } 

@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
 export default class HomeScreen extends Component {
+  
+  handlePress = () => {
+    this.props.navigation.navigate('NewAlbum');
+  }
+
   render() {
     return (
     <View style={styles.container}>
       <Text>Welcome</Text>
       <Text>Create a new album: </Text>
-      <Icon name='ios-add-circle' size={40}/>
+      <TouchableHighlight onPress={this.handlePress} underlayColor="white">
+        <Icon name='ios-add-circle' size={40} onPress={this.handlePress} />
+      </TouchableHighlight>
     </View>
     );
   }
