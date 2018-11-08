@@ -1,12 +1,12 @@
 import React from 'react';
-import { createTabNavigator } from 'react-navigation';
+import { createMaterialTopTabNavigator } from 'react-navigation';
 import HomeScreen from '../components/screens/HomeScreen';
 import RollScreen from '../components/screens/RollScreen';
 import CamScreen from '../components/screens/CamScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AlbumNavigation from './AlbumNavigation';
 
-
-export default createTabNavigator({
+export default createMaterialTopTabNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
       tabBarLabel: 'Home',
@@ -15,7 +15,7 @@ export default createTabNavigator({
       )
     }
   },
-  Roll: { screen: RollScreen,
+  Roll: { screen: AlbumNavigation,
     navigationOptions: {
       tabBarLabel: 'Roll',
       tabBarIcon: ({tintColor}) => (

@@ -1,40 +1,47 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight } from 'react-native';
 import { FileSystem } from 'expo';
 import ImageItem from '../presentational/ImageItem';
 import { connect } from 'react-redux';
-import { fetchPictures } from '../../actions/actions';
+import { fetchAlbums } from '../../actions/actions';
+import ImageList from '../container/ImageList';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
 
 class RollScreen extends Component {
-  state = {
-    photos: []
-  };
 
   componentWillMount = async () => {
-    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.props.fetchPictures(pics);
+    const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
+    console.log('albums', albums);
+    this.props.fetchAlbums(albums);
   };
 
-  renderPhoto = fileName => {
-    return <View key={fileName} style={styles.imageWrap}>
-      <ImageItem image={`${PHOTOS_DIR}/${fileName}`} />
-    </View>;
+  handlePress = () => {
+    this.props.navigation.navigate('Album');
+  }
+
+  renderAlbum = album => {
+    return <TouchableHighlight onPress={this.handlePress} underlayColor="white">
+      <View style={styles.row}>
+        <Image source={{uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg'}} style={styles.thumbnail} />
+        <Text style={styles.title}>{album}</Text>
+        <Icon name='ios-arrow-forward' size={24} />
+      </View>
+      </TouchableHighlight>;
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Roll:</Text>
         <View style={styles.wraper}>
           <FlatList
-            numColumns={3}
-            data={this.props.pictures}
+            data={this.props.albums}
             extraData={this.state}
             keyExtractor={(item, index) => item}
-            renderItem={({ item, separators }) => this.renderPhoto(item)}
+            renderItem={({ item, separators }) => this.renderAlbum(item)}
           />
         </View>
       </View>
@@ -42,12 +49,13 @@ class RollScreen extends Component {
   }
 }
 
+
 const mapStateToProps = (state) => ({
-  pictures: state.pictures,
+  albums: state.albums,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchPictures: (pictures) => dispatch(fetchPictures(pictures))
+  fetchAlbums: (albums) => dispatch(fetchAlbums(albums))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RollScreen);
@@ -55,7 +63,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(RollScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 25,
     flexDirection: 'column',
   },
   wraper: {
@@ -71,5 +78,28 @@ const styles = StyleSheet.create({
     height: (Dimensions.get('window').height / 5) - 12,
     width: (Dimensions.get('window').width / 3) - 4,
     backgroundColor: '#62686d'
+  },
+  row: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginVertical: 5,
+    // marginHorizontal: 15,
+    // borderRadius:10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#e3e7ef',
+  },
+  thumbnail: {
+    height: (Dimensions.get('window').height / 5) - 12,
+    width: (Dimensions.get('window').width / 3) - 4,
+    borderRadius:10
+  },
+  title: {
+    color: 'rgb(255, 255, 255)',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+    paddingRight: 10
   }
 });

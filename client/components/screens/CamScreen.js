@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { connect } from 'react-redux';
 import { fetchPictures } from '../../actions/actions';
 
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
+const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/uno';
 
 class CamScreen extends Component {
   state = {
@@ -20,9 +20,16 @@ class CamScreen extends Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
-  componentDidMount() {
-    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
+  async componentDidMount() {
+    // FileSystem.deleteAsync(PHOTOS_DIR);
+    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
       console.log(e, 'Directory exists');
+    });
+    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos/uno').catch(e => {
+      console.log(e, 'Directory UNO exists');
+    });
+    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos/dos').catch(e => {
+      console.log(e, 'Directory DOS exists');
     });
   }
 
@@ -37,7 +44,7 @@ class CamScreen extends Component {
     console.log(photo);
     await FileSystem.moveAsync({
       from: photo.uri,
-      to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
+      to: `${FileSystem.documentDirectory}photos/uno/${Date.now()}.jpg`,
     });
     const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.props.fetchPictures(pics);

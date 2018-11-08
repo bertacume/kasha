@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Image, Text } from 'react-native';
-import { View } from 'native-base';
 
 export default class ImageItem extends Component {
   render() {
