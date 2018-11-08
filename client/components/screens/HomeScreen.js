@@ -16,7 +16,6 @@ class HomeScreen extends Component {
     await FileSystem.makeDirectoryAsync(PHOTOS_DIR).catch(e => {
       console.log(e, 'Directory exists');
     });
-     
   }
   
   handlePress = () => {
@@ -52,7 +51,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateCurrentAlbum: (album) => dispatch(updateCurrentAlbum(album))
+  updateCurrentAlbum: (album) => dispatch(updateCurrentAlbum(album)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

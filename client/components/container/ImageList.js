@@ -1,31 +1,33 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList } from 'react-native';
 import { FileSystem } from 'expo';
 import ImageItem from '../presentational/ImageItem';
-import { connect } from 'react-redux';
-import { fetchPictures } from '../../actions/actions';
 
 
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/uno';
+const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
-class ImageList extends Component {
+export default class ImageList extends Component {
+  state = {
+    pictures: []
+  }
 
   componentWillMount = async () => {
-    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.props.fetchPictures(pics);
+    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.album);
+    this.setState({pictures: pics});
+    console.log('aaaaaaaaaa', this.state.pictures);
   };
 
   renderPhoto = fileName => {
     return <View key={fileName} style={styles.imageWrap}>
-      <ImageItem image={`${PHOTOS_DIR}/${fileName}`} />
+      <ImageItem image={`${PHOTOS_DIR}${this.props.album}/${fileName}`} />
     </View>;
   }
 
-  render() {
+  render() {   
     return (
           <FlatList
             numColumns={3}
-            data={this.props.pictures}
+            data={this.state.pictures}
             extraData={this.state}
             keyExtractor={(item, index) => item}
             renderItem={({ item, separators }) => this.renderPhoto(item)}
@@ -33,16 +35,6 @@ class ImageList extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => ({
-  pictures: state.pictures,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchPictures: (pictures) => dispatch(fetchPictures(pictures))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ImageList);
 
 const styles = StyleSheet.create({
   container: {

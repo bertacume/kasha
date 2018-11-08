@@ -1,13 +1,8 @@
 export const types = {
-  FETCH_PICTURES: 'FETCH_PICTURES',
   FETCH_ALBUMS: 'FETCH_ALBUMS',
   UPDATE_CURRENT_ALBUM: 'UPDATE_CURRENT_ALBUM',
+  RENDER_ALBUM: 'RENDER_ALBUM'
 }
-
-export const fetchPictures = (pictures) => ({
-  type: types.FETCH_PICTURES,
-  pictures
-})
 
 export const fetchAlbums = (albums) => ({
   type: types.FETCH_ALBUMS,
@@ -17,4 +12,9 @@ export const fetchAlbums = (albums) => ({
 export const updateCurrentAlbum = (current_album) => ({
   type: types.UPDATE_CURRENT_ALBUM,
   current_album
+})
+
+export const renderAlbum = (render_album) => ({
+  type: types.RENDER_ALBUM,
+  render_album
 })

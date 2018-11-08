@@ -5,13 +5,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { connect } from 'react-redux';
 import { fetchPictures } from '../../actions/actions';
 
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/uno';
+const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
 class CamScreen extends Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
-    focusedScreen: true
   };
 
   async componentWillMount() {
@@ -24,16 +23,14 @@ class CamScreen extends Component {
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
     }
   };
-
+  
   onPictureSaved = async photo => {
     await FileSystem.moveAsync({
       from: photo.uri,
-      to: `${FileSystem.documentDirectory}photos/${this.props.currentAlbum}/${Date.now()}.jpg`,
+      to: `${PHOTOS_DIR}${this.props.currentAlbum}/${Date.now()}.jpg`,
     });
-    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.props.fetchPictures(pics);
   }
-
+  
   renderCamera() {
     return (
         <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}}>

@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import ImageList from '../container/ImageList';
+import { connect } from 'react-redux';
 
-
-export default class NewAlbumScreen extends Component {
+class NewAlbumScreen extends Component {
 
   render() {
     return (
-      <ImageList />
+      <ImageList album={this.props.renderAlbum} />
     );
   }
 }
+
+
+const mapStateToProps = (state) => ({
+  pictures: state.pictures,
+  renderAlbum: state.render_album,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewAlbumScreen);
