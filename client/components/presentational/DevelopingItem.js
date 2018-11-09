@@ -8,7 +8,7 @@ export default class ImageItem extends Component {
     return (
       <View style={styles.image} source={{ uri: this.props.image }}>
         <Icon name='md-time' size={96} style={styles.icon} />
-        <Text style={styles.text}>1</Text>
+        <Text style={styles.text}>{this.props.picIndex + 1}</Text>
       </View>
     );
   }

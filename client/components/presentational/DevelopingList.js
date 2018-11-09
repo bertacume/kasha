@@ -15,9 +15,9 @@ export default class ImageList extends Component {
     this.setState({pictures: pics});
   };
 
-  renderPhoto = fileName => {
+  renderPhoto = (fileName, index) => {
     return <View key={fileName} style={styles.imageWrap}>
-      <DevelopingItem />
+      <DevelopingItem picIndex={index} />
     </View>;
   }
 
@@ -28,7 +28,7 @@ export default class ImageList extends Component {
             data={this.state.pictures}
             extraData={this.state}
             keyExtractor={(item, index) => item}
-            renderItem={({ item, separators }) => this.renderPhoto(item)}
+            renderItem={({ item, index }) => this.renderPhoto(item, index)}
           />
     );
   }

@@ -15,16 +15,16 @@ class NewAlbumScreen extends Component {
   }
 
   handlePress = async () => {
-    if (!this.state.title.length) {
+    if (!this.state.title.length) { //Empty Field
       this.setState({emptyMssg: 'Empty Field. Please enter an album name.'});
       return;
     }
-    if (this.props.currentAlbum && this.props.currentAlbum.length) {
+    if (this.props.currentAlbum && this.props.currentAlbum.length) { //Not 36 pics yet
       this.setState({emptyMssg: 'Film in process'})
       return;
     }
     const album = `${this.state.title}_${Date.now()}`;
-    if (this.props.albums.includes(album)) {
+    if (this.props.albums.includes(album)) { //Album name cant be the same
       this.setState({emptyMssg: 'This album already exists'})
       return;
     }

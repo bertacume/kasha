@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import { fetchPictures, incrementPicIndex } from '../../actions/actions';
+import { incrementPicIndex } from '../../actions/actions';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
@@ -14,22 +14,35 @@ class CamScreen extends Component {
   };
 
   async componentWillMount() {
+    //Get camera permissions
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
   
   takePicture = () => {
+    //check if it has already reached 36 pics
+    //TODO: notif. you cant take more pics till you start developing
+    if (this.props.developingAviable) return;
+    
     if (this.camera) {
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
     }
   };
   
   onPictureSaved = async photo => {
+    //save pic in currentAlbum directory
     await FileSystem.moveAsync({
       from: photo.uri,
       to: `${PHOTOS_DIR}${this.props.currentAlbum}/${Date.now()}.jpg`,
     });
+
+    //increment pic Index
     this.props.incrementPicIndex();
+
+    //set devAviable if pic Index === 36
+    if (this.props.picIndex === 36) {
+      this.props.setDevelopingAviable(true);
+    }
   }
   
   renderCamera() {
@@ -60,11 +73,13 @@ class CamScreen extends Component {
 
 const mapStateToProps = (state) => ({
   currentAlbum: state.current_album,
-  picIndex: state.picIndex
+  developingAlbum: state.developingAlbum,
+  developingAviable: state.developingAviable,
+  picIndex: state.picIndex,
 });
 const mapDispatchToProps = (dispatch) => ({
-  fetchPictures: (pictures) => dispatch(fetchPictures(pictures)),
-  incrementPicIndex: () => dispatch(incrementPicIndex())
+  incrementPicIndex: () => dispatch(incrementPicIndex()),
+  setDevelopingAviable: () => dispatch(setDevelopingAviable()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CamScreen);

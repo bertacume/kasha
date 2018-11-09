@@ -16,6 +16,14 @@ const reducers = (state = [], action) => {
       console.log('reducer current album', action.current_album);
       return {...state, current_album: action.current_album};
 
+    case types.UPDATE_DEVELOPING_ALBUM:
+      console.log('reducer dev album', action.developingAlbum);
+      return {...state, developingAlbum: action.developingAlbum};
+
+    case types.SET_DEVELOPING_AVIABLE:
+      console.log('reducer set developingAviable', action.developingAviable);
+      return {...state, developingAviable: action.developingAviable};
+
     case types.RENDER_ALBUM:
       console.log('reducer render album', action.render_album);
       return {...state, render_album: action.render_album};
