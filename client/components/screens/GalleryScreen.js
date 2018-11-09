@@ -6,15 +6,9 @@ import { connect } from 'react-redux';
 class NewAlbumScreen extends Component {
 
   render() {
-    if (this.props.renderAlbum === this.props.currentAlbum || this.props.renderAlbum === this.props.developingAlbum) {
-      return (
-        <DevelopingList album={this.props.renderAlbum} />
-      );
-    } else {
-      return (
-        <ImageList album={this.props.renderAlbum} />
-      );
-    }
+    return (this.props.renderAlbum === this.props.currentAlbum || this.props.renderAlbum === this.props.developingAlbum) 
+         ? <DevelopingList album={this.props.renderAlbum} />
+         : <ImageList album={this.props.renderAlbum} />
   }
 }
 

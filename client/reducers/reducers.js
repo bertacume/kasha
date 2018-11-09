@@ -1,6 +1,15 @@
 import { types } from '../actions/actionTypes';
 
-const reducers = (state = [], action) => {
+const initialState = {
+  albums: [],
+  currentAlbum: false,
+  developingAlbum: false,
+  developingAviable: false,
+  expirationDate: false,
+  renderAlbum: false,
+}
+
+const reducers = (state = initialState, action) => {
   switch (action.type) {
     case types.FETCH_ALBUMS:
       console.log('reducer albums', action.albums);
@@ -33,7 +42,7 @@ const reducers = (state = [], action) => {
       return {...state, picIndex: action.picIndex};
       
       case types.INCREMENT_PIC_INDEX:
-      console.log('reducer picIndex', state.picIndex);
+      console.log('reducer picIndex', state.picIndex + 1);
       return {...state, picIndex: state.picIndex + 1};
       
       case types.SET_EXPIRATION_DATE:
