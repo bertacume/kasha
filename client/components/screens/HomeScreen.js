@@ -152,7 +152,7 @@ class HomeScreen extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  currentAlbum: state.current_album,
+  currentAlbum: state.currentAlbum,
   developingAlbum: state.developingAlbum,
   picIndex: state.picIndex,
   developingAviable: state.developingAviable,

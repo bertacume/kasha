@@ -13,8 +13,8 @@ const reducers = (state = [], action) => {
       return {...state, albums: albums};
 
     case types.UPDATE_CURRENT_ALBUM:
-      console.log('reducer current album', action.current_album);
-      return {...state, current_album: action.current_album};
+      console.log('reducer current album', action.currentAlbum);
+      return {...state, currentAlbum: action.currentAlbum};
 
     case types.UPDATE_DEVELOPING_ALBUM:
       console.log('reducer dev album', action.developingAlbum);
@@ -25,8 +25,8 @@ const reducers = (state = [], action) => {
       return {...state, developingAviable: action.developingAviable};
 
     case types.RENDER_ALBUM:
-      console.log('reducer render album', action.render_album);
-      return {...state, render_album: action.render_album};
+      console.log('reducer render album', action.renderAlbum);
+      return {...state, renderAlbum: action.renderAlbum};
 
     case types.SET_PIC_INDEX:
       console.log('reducer set picIndex', action.picIndex);

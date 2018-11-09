@@ -14,9 +14,9 @@ export const fetchAlbums = (albums) => ({
   albums
 })
 
-export const updateCurrentAlbum = (current_album) => ({
+export const updateCurrentAlbum = (currentAlbum) => ({
   type: types.UPDATE_CURRENT_ALBUM,
-  current_album
+  currentAlbum
 })
 
 export const updateDevelopingAlbum = (developingAlbum) => ({
@@ -29,9 +29,9 @@ export const setDevelopingAviable = (developingAviable) => ({
   developingAviable
 })
 
-export const renderAlbum = (render_album) => ({
+export const renderAlbum = (renderAlbum) => ({
   type: types.RENDER_ALBUM,
-  render_album
+  renderAlbum
 })
 
 export const setPicIndex = (picIndex) => ({

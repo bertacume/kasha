@@ -72,7 +72,7 @@ class CamScreen extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  currentAlbum: state.current_album,
+  currentAlbum: state.currentAlbum,
   developingAlbum: state.developingAlbum,
   developingAviable: state.developingAviable,
   picIndex: state.picIndex,

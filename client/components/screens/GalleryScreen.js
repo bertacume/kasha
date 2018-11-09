@@ -19,8 +19,8 @@ class NewAlbumScreen extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  renderAlbum: state.render_album,
-  currentAlbum: state.current_album,
+  renderAlbum: state.renderAlbum,
+  currentAlbum: state.currentAlbum,
   developingAlbum: state.developingAlbum,
 });
 
