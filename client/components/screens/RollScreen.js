@@ -12,8 +12,7 @@ const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
 class RollScreen extends Component {
 
   componentWillMount = async () => {
-    const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.props.fetchAlbums(albums);
+    
   };
 
   handlePress = (album) => {

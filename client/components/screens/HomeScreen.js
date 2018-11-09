@@ -2,49 +2,98 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 import { FileSystem } from 'expo';
-
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AsyncStorage } from "react-native";
-import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable } from '../../actions/actions';
+import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable, setExpirationDate, fetchAlbums } from '../../actions/actions';
+import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/helpers';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
+const limitPics = 4;
 
 class HomeScreen extends Component {
+  myInterval = null
+
   async componentWillMount() {
-    //Try to create a new directory 'photos'
+    // Try to create a new directory 'photos'
     await FileSystem.makeDirectoryAsync(PHOTOS_DIR).catch(e => {
       console.log(e, 'Directory exists');
     });
-
+    
+    //update store albums from local storage
+    const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
+    this.props.fetchAlbums(albums);
+    
     //update store current album from local storage
-    await this.getFromLocalStorage('currentAlbum', this.props.updateCurrentAlbum);
-
+    await getFromLocalStorage('currentAlbum', this.props.updateCurrentAlbum);
+    
     //update store current pic index from local storage
-    const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.currentAlbum);
-    this.props.setPicIndex(pics.length);
-
-    //update store developingAlbum from local storage
-    await this.getFromLocalStorage('developingAlbum', this.props.updateDevelopingAlbum);
-
+    if (this.props.currentAlbum){
+      const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.currentAlbum);
+      this.props.setPicIndex(pics.length);
+    } else this.props.setPicIndex(0);
+    
     //update store developingAviable
-    if(this.props.developingAlbum) this.props.setDevelopingAviable(true);
-  }
-
-  handlePress = () => {
-    this.props.navigation.navigate('NewAlbum');
-  }
-
-  getFromLocalStorage = async (key, func) => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if (value !== null) {
-        await func(value);
-      }
-    } catch (e) {
-      console.log(e, 'Not found');
+    if (this.props.picIndex >= limitPics) {
+      await this.props.setDevelopingAviable(true);
+    }
+    
+    //update store expirationDate
+    await getFromLocalStorage('expirationDate', (value) => this.props.setExpirationDate(Date.parse(value)));
+    
+    //update store developingAlbum from local storage
+    await getFromLocalStorage('developingAlbum', this.props.updateDevelopingAlbum);
+    if (this.props.developingAlbum) {
+      this.checkTimer();
+      this.myInterval = setInterval(() => this.checkTimer(), 60 * 1000);
     }
   }
+  
+  
+  handlePressPlus = () => {
+    this.props.navigation.navigate('NewAlbum');
+  }
+  
+  handlePressStartDevelop = async () => {
+    this.startTimer(2, 'min');
 
+    await this.props.updateDevelopingAlbum(this.props.currentAlbum);
+    storeDataLocalStorage('developingAlbum', this.props.currentAlbum);
+
+    this.props.updateCurrentAlbum(false);
+    removeDataLocalStorage('currentAlbum');
+
+    this.props.setDevelopingAviable(false);
+
+    this.props.setPicIndex(0);
+
+    this.checkTimer();
+    this.myInterval = setInterval(() => this.checkTimer(), 60 * 1000);
+  }
+  
+  startTimer = (time, unit) => {
+    let expirationDate;
+    if (unit === 'min') {
+      const now = new Date();
+      expirationDate = new Date(now.getTime() + time*60000);
+      console.log(`${time} min`, expirationDate.toLocaleString());
+    }
+    if (unit === 'day') {
+      expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + time);
+      console.log(`${time} day`, expirationDate.toLocaleString());
+    }
+    this.props.setExpirationDate(expirationDate);
+    storeDataLocalStorage('expirationDate', expirationDate);
+  }
+  
+  checkTimer = () => {
+    if (this.props.expirationDate > new Date()) return;
+    this.props.setExpirationDate(false);
+    removeDataLocalStorage('expirationDate');
+    this.props.updateDevelopingAlbum(false);
+    removeDataLocalStorage('developingAlbum');
+    clearInterval(this.myInterval);
+  }
+  
   renderAlbumContainer = () => {
     if (this.props.currentAlbum) {
       const albumName = this.props.currentAlbum.slice(0, this.props.currentAlbum.lastIndexOf("_"));
@@ -57,15 +106,15 @@ class HomeScreen extends Component {
       );
     }
     return (
-      <TouchableHighlight onPress={this.handlePress} underlayColor="white">
+      <TouchableHighlight onPress={this.handlePressPlus} underlayColor="white">
         <Icon name='ios-add-circle' size={40} />
       </TouchableHighlight>
     );
   }
   
   renderDevelopingContainer = () => {
-    //tres opcions NOTAVIAVBLE - AVIABLE - PROCESS
-    if (this.props.developingAlbum) { //PROCESS
+    //tres opcions NOTAVIAVBLE - AVIABLE - DEVELOPING
+    if (this.props.developingAlbum) { //DEVELOPING
       return (
         <View style={styles.item}>
           <Icon name='md-time' size={150} style={styles.icon} />
@@ -75,10 +124,11 @@ class HomeScreen extends Component {
       );
     } else if (this.props.developingAviable) { //AVIABLE
       return (
-        <View style={styles.item}>
-          //TODO: onPress setDevelopingAviable --> false, updateDevelopingAlbum --> curent album name
-          <Text>START DEVELOP.</Text>
-        </View>
+        <TouchableHighlight onPress={this.handlePressStartDevelop} underlayColor="white">
+          <View style={styles.item}>
+            <Text>START DEVELOP.</Text>
+          </View>
+        </TouchableHighlight>
       );
     }
     //NOT AVIABLE
@@ -88,9 +138,8 @@ class HomeScreen extends Component {
       </View>
     );
   }
-  
-  render
-  
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -108,13 +157,16 @@ const mapStateToProps = (state) => ({
   developingAlbum: state.developingAlbum,
   picIndex: state.picIndex,
   developingAviable: state.developingAviable,
+  expirationDate: state.expirationDate,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   updateCurrentAlbum: (album) => dispatch(updateCurrentAlbum(album)),
   updateDevelopingAlbum: (album) => dispatch(updateDevelopingAlbum(album)),
   setPicIndex: (picIndex) => dispatch(setPicIndex(picIndex)),
-  setDevelopingAviable: () => dispatch(setDevelopingAviable()),
+  setDevelopingAviable: (flag) => dispatch(setDevelopingAviable(flag)),
+  setExpirationDate: (date) => dispatch(setExpirationDate(date)),
+  fetchAlbums: (albums) => dispatch(fetchAlbums(albums)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

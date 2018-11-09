@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet, View, Image, Text, TextInput, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { updateCurrentAlbum, fetchAlbums } from '../../actions/actions';
-import { AsyncStorage } from "react-native";
+import { storeDataLocalStorage } from '../../helpers/helpers';
 import { FileSystem } from 'expo';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
@@ -32,18 +32,10 @@ class NewAlbumScreen extends Component {
       console.log(e, `Directory ${this.state.title} exists`);
     });
     this.props.updateCurrentAlbum(album);
-    this.storeData(album);
+    storeDataLocalStorage('currentAlbum', album);
     const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.props.fetchAlbums(albums);
     this.props.navigation.navigate('Home');
-  }
-
-  storeData = async (album) => {
-    try {
-      await AsyncStorage.setItem('currentAlbum', album);
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   render() {

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 class NewAlbumScreen extends Component {
 
   render() {
-    if (this.props.renderAlbum === this.props.currentAlbum) {
+    if (this.props.renderAlbum === this.props.currentAlbum || this.props.renderAlbum === this.props.developingAlbum) {
       return (
         <DevelopingList album={this.props.renderAlbum} />
       );
@@ -18,13 +18,15 @@ class NewAlbumScreen extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => ({
   renderAlbum: state.render_album,
   currentAlbum: state.current_album,
+  developingAlbum: state.developingAlbum,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  updateDevelopingAlbum: (album) => dispatch(updateDevelopingAlbum(album)),
+  setExpirationDate: (date) => dispatch(setExpirationDate(date)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewAlbumScreen);

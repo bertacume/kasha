@@ -5,7 +5,8 @@ export const types = {
   SET_DEVELOPING_AVIABLE: 'DEVELOPING_AVIABLE',
   RENDER_ALBUM: 'RENDER_ALBUM',
   SET_PIC_INDEX: 'SET_PIC_INDEX',
-  INCREMENT_PIC_INDEX: 'INCREMENT_PIC_INDEX'
+  INCREMENT_PIC_INDEX: 'INCREMENT_PIC_INDEX',
+  SET_EXPIRATION_DATE: 'SET_EXPIRATION_DATE',
 }
 
 export const fetchAlbums = (albums) => ({
@@ -40,4 +41,9 @@ export const setPicIndex = (picIndex) => ({
 
 export const incrementPicIndex = () => ({
   type: types.INCREMENT_PIC_INDEX
+})
+
+export const setExpirationDate = (expirationDate) => ({
+  type: types.SET_EXPIRATION_DATE,
+  expirationDate
 })

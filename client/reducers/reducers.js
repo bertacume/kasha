@@ -14,10 +14,12 @@ const reducers = (state = [], action) => {
 
     case types.UPDATE_CURRENT_ALBUM:
       console.log('reducer current album', action.current_album);
+      console.log('state', state);
       return {...state, current_album: action.current_album};
 
     case types.UPDATE_DEVELOPING_ALBUM:
       console.log('reducer dev album', action.developingAlbum);
+      console.log('state', state);
       return {...state, developingAlbum: action.developingAlbum};
 
     case types.SET_DEVELOPING_AVIABLE:
@@ -31,11 +33,15 @@ const reducers = (state = [], action) => {
     case types.SET_PIC_INDEX:
       console.log('reducer set picIndex', action.picIndex);
       return {...state, picIndex: action.picIndex};
-
-    case types.INCREMENT_PIC_INDEX:
+      
+      case types.INCREMENT_PIC_INDEX:
       console.log('reducer picIndex', state.picIndex);
       return {...state, picIndex: state.picIndex + 1};
-
+      
+      case types.SET_EXPIRATION_DATE:
+        console.log('reducer set expirationDate', action.expirationDate);
+        return {...state, expirationDate: action.expirationDate};
+      
     default:
       return state;
   }

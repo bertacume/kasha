@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import { incrementPicIndex } from '../../actions/actions';
+import { incrementPicIndex, setDevelopingAviable } from '../../actions/actions';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
+const limitPics = 4;
 
 class CamScreen extends Component {
   state = {
@@ -22,7 +23,7 @@ class CamScreen extends Component {
   takePicture = () => {
     //check if it has already reached 36 pics
     //TODO: notif. you cant take more pics till you start developing
-    if (this.props.developingAviable) return;
+    if (!this.props.currentAlbum || this.props.picIndex >= limitPics) return;
     
     if (this.camera) {
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
@@ -40,7 +41,7 @@ class CamScreen extends Component {
     this.props.incrementPicIndex();
 
     //set devAviable if pic Index === 36
-    if (this.props.picIndex === 36) {
+    if (this.props.picIndex >= limitPics) {
       this.props.setDevelopingAviable(true);
     }
   }
@@ -60,7 +61,7 @@ class CamScreen extends Component {
   }
 
   render() {
-    const { hasCameraPermission, focusedScreen } = this.state;
+    const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {
       return <View></View>
     } else if (hasCameraPermission === false) {
@@ -79,7 +80,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   incrementPicIndex: () => dispatch(incrementPicIndex()),
-  setDevelopingAviable: () => dispatch(setDevelopingAviable()),
+  setDevelopingAviable: (flag) => dispatch(setDevelopingAviable(flag)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CamScreen);
