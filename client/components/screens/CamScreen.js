@@ -19,11 +19,19 @@ class CamScreen extends Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
   
-  takePicture = () => {
+  takePicture = async () => {
     //check if it has already reached 36 pics
     //TODO: notif. you cant take more pics till you start developing
     if (!this.props.currentAlbum || this.props.picIndex >= LIMIT_PICS) return;
     
+    //increment pic Index
+    await this.props.incrementPicIndex();
+  
+    //set devAviable if pic Index === 36
+    if (this.props.picIndex >= LIMIT_PICS) {
+      this.props.setDevelopingAviable(true);
+    }
+
     if (this.camera) {
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
     }
@@ -36,13 +44,6 @@ class CamScreen extends Component {
       to: `${PHOTOS_DIR}${this.props.currentAlbum}/${Date.now()}.jpg`,
     });
 
-    //increment pic Index
-    this.props.incrementPicIndex();
-
-    //set devAviable if pic Index === 36
-    if (this.props.picIndex >= LIMIT_PICS) {
-      this.props.setDevelopingAviable(true);
-    }
   }
   
   renderCamera() {
