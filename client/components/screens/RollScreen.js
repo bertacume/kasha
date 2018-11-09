@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight } from 'react-native';
-import { FileSystem } from 'expo';
 import { connect } from 'react-redux';
 import { fetchAlbums, renderAlbum } from '../../actions/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
-
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
 
 class RollScreen extends Component {
 

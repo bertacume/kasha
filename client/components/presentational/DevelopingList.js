@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions, FlatList } from 'react-native';
 import { FileSystem } from 'expo';
 import DevelopingItem from './DevelopingItem';
+import { PHOTOS_DIR } from '../../helpers/constants';
 
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
 export default class ImageList extends Component {
   state = {

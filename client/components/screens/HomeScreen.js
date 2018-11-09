@@ -5,15 +5,14 @@ import { FileSystem } from 'expo';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable, setExpirationDate, fetchAlbums } from '../../actions/actions';
 import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/helpers';
-
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
-const limitPics = 4;
+import { PHOTOS_DIR, LIMIT_PICS, DEVELOPING_TIME } from '../../helpers/constants';
 
 class HomeScreen extends Component {
   myInterval = null
 
   async componentWillMount() {
     // Try to create a new directory 'photos'
+    console.log('bye', PHOTOS_DIR);
     await FileSystem.makeDirectoryAsync(PHOTOS_DIR).catch(e => {
       console.log(e, 'Directory exists');
     });
@@ -32,7 +31,7 @@ class HomeScreen extends Component {
     } else this.props.setPicIndex(0);
     
     //update store developingAviable
-    if (this.props.picIndex >= limitPics) {
+    if (this.props.picIndex >= LIMIT_PICS) {
       await this.props.setDevelopingAviable(true);
     }
     
@@ -53,7 +52,7 @@ class HomeScreen extends Component {
   }
   
   handlePressStartDevelop = async () => {
-    this.startTimer(2, 'min');
+    this.startTimer(...DEVELOPING_TIME);
 
     await this.props.updateDevelopingAlbum(this.props.currentAlbum);
     storeDataLocalStorage('developingAlbum', this.props.currentAlbum);

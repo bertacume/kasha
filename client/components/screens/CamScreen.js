@@ -4,9 +4,8 @@ import { Camera, Permissions, FileSystem } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import { incrementPicIndex, setDevelopingAviable } from '../../actions/actions';
+import { PHOTOS_DIR, LIMIT_PICS } from '../../helpers/constants';
 
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
-const limitPics = 4;
 
 class CamScreen extends Component {
   state = {
@@ -23,7 +22,7 @@ class CamScreen extends Component {
   takePicture = () => {
     //check if it has already reached 36 pics
     //TODO: notif. you cant take more pics till you start developing
-    if (!this.props.currentAlbum || this.props.picIndex >= limitPics) return;
+    if (!this.props.currentAlbum || this.props.picIndex >= LIMIT_PICS) return;
     
     if (this.camera) {
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
@@ -41,7 +40,7 @@ class CamScreen extends Component {
     this.props.incrementPicIndex();
 
     //set devAviable if pic Index === 36
-    if (this.props.picIndex >= limitPics) {
+    if (this.props.picIndex >= LIMIT_PICS) {
       this.props.setDevelopingAviable(true);
     }
   }
