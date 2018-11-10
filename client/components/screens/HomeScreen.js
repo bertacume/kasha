@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TouchableHighlight, Image, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Image, Animated } from 'react-native';
 import { FileSystem } from 'expo';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable, setExpirationDate, fetchAlbums } from '../../actions/actions';
-import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/helpers';
+import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/storageHelpers';
+import { renderAnimatedSpinners } from '../../helpers/animationHelpers';
 import { PHOTOS_DIR, LIMIT_PICS, DEVELOPING_TIME } from '../../helpers/constants';
 import { Font } from 'expo';
 
@@ -102,27 +102,7 @@ class HomeScreen extends Component {
     this.props.updateDevelopingAlbum(false);
     removeDataLocalStorage('developingAlbum');
     clearInterval(this.myInterval);
-  }
-
-  animateRotation = (duration) => {
-    
-    this.state = { spinValue: new Animated.Value(0) }
-  
-    // First set up animation
-    Animated.loop( 
-      Animated.timing(
-        this.state.spinValue, { 
-          toValue: 1, 
-          duration: duration, 
-          easing: Easing.linear, 
-          useNativeDriver: true, 
-        }) ).start()
-  
-    // Second interpolate beginning and end values (in this case 0 and 1)
-    return this.state.spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '360deg']
-    })
+    //TODO :if
   }
 
   renderAlbumContainer = () => {
@@ -144,56 +124,15 @@ class HomeScreen extends Component {
       </TouchableHighlight>
     );
   }
-  
+
   renderDevelopingContainer = () => {
     //tres opcions NOTAVIAVBLE - AVIABLE - DEVELOPING
     if (this.props.developingAlbum) { //DEVELOPING
       const developingAlbum = this.props.developingAlbum.slice(0, this.props.developingAlbum.lastIndexOf("_"));
-      const spinA = this.animateRotation(7000);
-      const spinB = this.animateRotation(9500);
-      const spinC = this.animateRotation(6000);
-      const spinD = this.animateRotation(4000);
-      const spinE = this.animateRotation(9500);
-      const spinF = this.animateRotation(10000);
       return (
         <View style={styles.albumContainer}>
           <View style={styles.item}>
-            <Animated.Image style={{
-              transform: [{rotate: spinA}], resizeMode: 'cover',
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }} source={require('../../assets/spinner/1.png')} />
-            <Animated.Image style={{
-              transform: [{rotate: spinB}], resizeMode: 'cover',
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }} source={require('../../assets/spinner/2.png')} />
-            <Animated.Image style={{
-              transform: [{rotate: spinC}], resizeMode: 'cover',
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }} source={require('../../assets/spinner/1.png')} />
-            <Animated.Image style={{
-              transform: [{rotate: spinD}], resizeMode: 'cover',
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }} source={require('../../assets/spinner/2.png')} />
-            <Animated.Image style={{
-              transform: [{rotate: spinE}], resizeMode: 'cover',
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }} source={require('../../assets/spinner/1.png')} />
-            <Animated.Image style={{
-              transform: [{rotate: spinF}], resizeMode: 'cover',
-              position: 'absolute',
-              width: '100%',
-              height: '100%'
-            }} source={require('../../assets/spinner/2.png')} />
+            {renderAnimatedSpinners()}
             {/* <Image source={require('../../assets/devAl.gif')} style={styles.ballImage} /> */}
             {/* <Text style={styles.devText}>{DEVELOPING_TIME[0]} {DEVELOPING_TIME[1]}</Text> */}
             <Text style={styles.devText}>DEVELOPING</Text>
@@ -343,5 +282,8 @@ const styles = StyleSheet.create({
     height: '12%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  AnimatedImage: {
+
   },
 });
