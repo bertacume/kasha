@@ -1,43 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Image } from 'react-native';
 import { FileSystem } from 'expo';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable, setExpirationDate, fetchAlbums } from '../../actions/actions';
 import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/helpers';
 import { PHOTOS_DIR, LIMIT_PICS, DEVELOPING_TIME } from '../../helpers/constants';
+import { Font } from 'expo';
 
 class HomeScreen extends Component {
+  state = {
+    fontLoaded: false,
+  };
+
   myInterval = null
 
   async componentWillMount() {
+    await Font.loadAsync({
+      'MontserratAlternates-Light': require('../../assets/fonts/MontserratAlternates-Light.ttf'),
+    });
+    this.setState({ fontLoaded: true });
     // Try to create a new directory 'photos'
     console.log('bye', PHOTOS_DIR);
     await FileSystem.makeDirectoryAsync(PHOTOS_DIR).catch(e => {
       console.log(e, 'Directory exists');
     });
-    
+
     //update store albums from local storage
     const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.props.fetchAlbums(albums);
-    
+
     //update store current album from local storage
     await getFromLocalStorage('currentAlbum', this.props.updateCurrentAlbum);
-    
+
     //update store current pic index from local storage
-    if (this.props.currentAlbum){
+    if (this.props.currentAlbum) {
       const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.currentAlbum);
       this.props.setPicIndex(pics.length);
     } else this.props.setPicIndex(0);
-    
+
     //update store developingAviable
     if (this.props.picIndex >= LIMIT_PICS) {
       await this.props.setDevelopingAviable(true);
     }
-    
+
     //update store expirationDate
     await getFromLocalStorage('expirationDate', (value) => this.props.setExpirationDate(Date.parse(value)));
-    
+
     //update store developingAlbum from local storage
     await getFromLocalStorage('developingAlbum', this.props.updateDevelopingAlbum);
     if (this.props.developingAlbum) {
@@ -45,12 +54,12 @@ class HomeScreen extends Component {
       this.myInterval = setInterval(() => this.checkTimer(), 60 * 1000);
     }
   }
-  
-  
+
+
   handlePressPlus = () => {
     this.props.navigation.navigate('NewAlbum');
   }
-  
+
   handlePressStartDevelop = async () => {
     this.startTimer(...DEVELOPING_TIME);
 
@@ -67,12 +76,12 @@ class HomeScreen extends Component {
     this.checkTimer();
     this.myInterval = setInterval(() => this.checkTimer(), 60 * 1000);
   }
-  
+
   startTimer = (time, unit) => {
     let expirationDate;
     if (unit === 'min') {
       const now = new Date();
-      expirationDate = new Date(now.getTime() + time*60000);
+      expirationDate = new Date(now.getTime() + time * 60000);
       console.log(`${time} min`, expirationDate.toLocaleString());
     }
     if (unit === 'day') {
@@ -83,7 +92,7 @@ class HomeScreen extends Component {
     this.props.setExpirationDate(expirationDate);
     storeDataLocalStorage('expirationDate', expirationDate);
   }
-  
+
   checkTimer = () => {
     if (this.props.expirationDate > new Date()) return;
     this.props.setExpirationDate(false);
@@ -92,15 +101,17 @@ class HomeScreen extends Component {
     removeDataLocalStorage('developingAlbum');
     clearInterval(this.myInterval);
   }
-  
+
   renderAlbumContainer = () => {
     if (this.props.currentAlbum) {
       const albumName = this.props.currentAlbum.slice(0, this.props.currentAlbum.lastIndexOf("_"));
       return (
         <View style={styles.item}>
-          <Icon name='md-time' size={150} style={styles.icon} />
-          <Text style={styles.index}>{this.props.picIndex}</Text>
-          {this.props.currentAlbum && <Text>{albumName}</Text>}
+          <View style={styles.item}>
+            <Image source={require('../../assets/circle-Al.png')} style={styles.ballImage} />
+            {this.state.fontLoaded && <Text style={styles.index}>{this.props.picIndex}</Text>}
+          </View>
+          {this.props.currentAlbum && <Text style={styles.text}>{albumName}</Text>}
         </View>
       );
     }
@@ -110,7 +121,7 @@ class HomeScreen extends Component {
       </TouchableHighlight>
     );
   }
-  
+
   renderDevelopingContainer = () => {
     //tres opcions NOTAVIAVBLE - AVIABLE - DEVELOPING
     if (this.props.developingAlbum) { //DEVELOPING
@@ -142,9 +153,9 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image source={require('../../assets/bg.jpg')} style={styles.backgroundImage} />
         {this.props.developingAlbum && <Text>Create a new album: </Text>}
         {this.renderAlbumContainer()}
-        <Text>Welcome</Text>
         {this.renderDevelopingContainer()}
       </View>
     );
@@ -183,18 +194,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'blue'
   },
+  backgroundImage: {
+    backgroundColor: '#ccc',
+    flex: 1,
+    resizeMode: 'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  ballImage: {
+    backgroundColor: '#ccc',
+    flex: 1,
+    resizeMode: 'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
   text: {
-    color: 'rgb(255,255,255)'
+    color: 'rgb(255,255,255)',
+    fontSize: 20,    
+    fontFamily: 'MontserratAlternates-Light',
   },
   item: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   index: {
-    color: 'rgb(0, 0, 0)',
-    fontSize: 40,
+    color: '#7aa8af',
+    fontSize: 60,
+    fontFamily: 'MontserratAlternates-Light',
   },
   icon: {
     flex: 1,
