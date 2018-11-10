@@ -134,10 +134,10 @@ class HomeScreen extends Component {
       );
     } else if (this.props.developingAviable) { //AVIABLE
       return (
-        <TouchableHighlight onPress={this.handlePressStartDevelop} underlayColor="white">
-          <View style={styles.item}>
-            <Text>START DEVELOP.</Text>
-          </View>
+        <TouchableHighlight onPress={this.handlePressStartDevelop} underlayColor="white" style={styles.btn}>
+          {/* <View style={styles.item}> */}
+            <Text style={styles.text}>Develop film</Text>
+          {/* </View> */}
         </TouchableHighlight>
       );
     }
@@ -155,8 +155,10 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <Image source={require('../../assets/bg.jpg')} style={styles.backgroundImage} />
         {this.props.developingAlbum && <Text>Create a new album: </Text>}
+        <View style={styles.subContainer}>
         {this.renderAlbumContainer()}
         {this.renderDevelopingContainer()}
+        </View>
       </View>
     );
   }
@@ -184,9 +186,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: 'rgb(255, 255, 255)',
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  subContainer: {
+    height: '100%',
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-evenly', 
   },
   slideDefault: {
     flex: 1,
@@ -234,5 +243,13 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'absolute',
     color: 'rgba(0, 0, 0, .1)'
-  }
+  },
+  btn: {
+    width: '50%',
+    height: '8%',
+    backgroundColor: 'rgba(255, 255, 255, .2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
 });
