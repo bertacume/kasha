@@ -19,6 +19,7 @@ class HomeScreen extends Component {
     await Font.loadAsync({
       'MontserratAlternates-Light': require('../../assets/fonts/MontserratAlternates-Light.ttf'),
       'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
+      'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
     });
     this.setState({ fontLoaded: true });
     // Try to create a new directory 'photos'
@@ -148,8 +149,12 @@ class HomeScreen extends Component {
     //tres opcions NOTAVIAVBLE - AVIABLE - DEVELOPING
     if (this.props.developingAlbum) { //DEVELOPING
       const developingAlbum = this.props.developingAlbum.slice(0, this.props.developingAlbum.lastIndexOf("_"));
-      const spinA = this.animateRotation(6000);
-      const spinB = this.animateRotation(4000);
+      const spinA = this.animateRotation(7000);
+      const spinB = this.animateRotation(9500);
+      const spinC = this.animateRotation(6000);
+      const spinD = this.animateRotation(4000);
+      const spinE = this.animateRotation(9500);
+      const spinF = this.animateRotation(10000);
       return (
         <View style={styles.albumContainer}>
           <View style={styles.item}>
@@ -158,19 +163,42 @@ class HomeScreen extends Component {
               position: 'absolute',
               width: '100%',
               height: '100%'
-            }} source={require('../../assets/circle-Al-a.png')} />
+            }} source={require('../../assets/spinner/1.png')} />
             <Animated.Image style={{
               transform: [{rotate: spinB}], resizeMode: 'cover',
               position: 'absolute',
               width: '100%',
               height: '100%'
-            }} source={require('../../assets/circle-Al-b.png')} />
+            }} source={require('../../assets/spinner/2.png')} />
+            <Animated.Image style={{
+              transform: [{rotate: spinC}], resizeMode: 'cover',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }} source={require('../../assets/spinner/1.png')} />
+            <Animated.Image style={{
+              transform: [{rotate: spinD}], resizeMode: 'cover',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }} source={require('../../assets/spinner/2.png')} />
+            <Animated.Image style={{
+              transform: [{rotate: spinE}], resizeMode: 'cover',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }} source={require('../../assets/spinner/1.png')} />
+            <Animated.Image style={{
+              transform: [{rotate: spinF}], resizeMode: 'cover',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }} source={require('../../assets/spinner/2.png')} />
             {/* <Image source={require('../../assets/devAl.gif')} style={styles.ballImage} /> */}
             {/* <Text style={styles.devText}>{DEVELOPING_TIME[0]} {DEVELOPING_TIME[1]}</Text> */}
-            <Text style={styles.index}>36</Text>
+            <Text style={styles.devText}>DEVELOPING</Text>
           </View>
           <Text style={styles.text}>{developingAlbum}</Text>
-          <Text style={styles.text}>Developing...</Text>
         </View>
       );
     } else if (this.props.developingAviable) { //AVIABLE
@@ -273,8 +301,8 @@ const styles = StyleSheet.create({
   },
   devText: {
     color: '#7aa8af',
-    fontSize: 20,
-    fontFamily: 'Montserrat-Light',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Regular',
   },
   item: {
     width: 150,
