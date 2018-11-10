@@ -11,21 +11,21 @@ import { PHOTOS_DIR } from '../../helpers/constants';
 class NewAlbumScreen extends Component {
   state = {
     title: '',
-    emptyMssg: ''
+    emptyMssg: '',
   }
 
   handlePress = async () => {
     if (!this.state.title.length) { //Empty Field
-      this.setState({emptyMssg: 'Empty Field. Please enter an album name.'});
+      this.setState({ emptyMssg: 'Empty Field. Please enter an album name.' });
       return;
     }
     if (this.props.currentAlbum && this.props.currentAlbum.length) { //Not 36 pics yet
-      this.setState({emptyMssg: 'Film in process'})
+      this.setState({ emptyMssg: 'Film in process' })
       return;
     }
     const album = `${this.state.title}_${Date.now()}`;
     if (this.props.albums.includes(album)) { //Album name cant be the same
-      this.setState({emptyMssg: 'This album already exists'})
+      this.setState({ emptyMssg: 'This album already exists' })
       return;
     }
     FileSystem.makeDirectoryAsync(PHOTOS_DIR + album).catch(e => {
@@ -50,8 +50,8 @@ class NewAlbumScreen extends Component {
             onChangeText={(title) => this.setState({ title, emptyMssg: '' })}
             value={this.state.text}
           />
-          <TouchableHighlight onPress={this.handlePress} underlayColor="transparent" style={styles.touch}>
-            <Icon name='ios-checkmark-circle-outline' size={40} style={styles.icon} />
+          <TouchableHighlight onPress={this.handlePress} underlayColor="transparent" style={styles.tickBtn}>
+            <Image source={require('../../assets/tickBtn.png')} style={styles.tickImage} />
           </TouchableHighlight>
         </View>
       </View>
@@ -100,21 +100,36 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 50,
     width: '100%',
-    borderColor: 'rgb(255, 255, 255)',
-    backgroundColor: 'rgba(255, 255, 255, .5)',
-    borderWidth: 1,
-    borderRadius: 5
+    backgroundColor: 'rgba(255, 255, 255, .4)',
+    borderRadius: 10,
+    borderColor: 'rgba(255, 255, 255, .2)',
+    borderWidth: 4,
+    color: 'rgb(255, 255, 255)',
   },
   text: {
     color: 'rgb(255, 255, 255)',
     alignSelf: 'flex-start',
     textTransform: 'uppercase',
     letterSpacing: 1,
+    fontFamily: 'Montserrat-Light',
   },
   touch: {
     borderRadius: 50,
   },
   icon: {
     color: 'rgb(255, 255, 255)'
-  }
+  },
+  tickImage: {
+    width: '80%',
+    height: '80%',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    resizeMode: 'contain',
+  },
+  tickBtn: {
+    width: '20%',
+    height: '12%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

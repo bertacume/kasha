@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Image, Animated, Easing } from 'react-native';
 import { FileSystem } from 'expo';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable, setExpirationDate, fetchAlbums } from '../../actions/actions';
@@ -18,6 +18,7 @@ class HomeScreen extends Component {
   async componentWillMount() {
     await Font.loadAsync({
       'MontserratAlternates-Light': require('../../assets/fonts/MontserratAlternates-Light.ttf'),
+      'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
     });
     this.setState({ fontLoaded: true });
     // Try to create a new directory 'photos'
@@ -102,11 +103,32 @@ class HomeScreen extends Component {
     clearInterval(this.myInterval);
   }
 
+  animateRotation = (duration) => {
+    
+    this.state = { spinValue: new Animated.Value(0) }
+  
+    // First set up animation
+    Animated.loop( 
+      Animated.timing(
+        this.state.spinValue, { 
+          toValue: 1, 
+          duration: duration, 
+          easing: Easing.linear, 
+          useNativeDriver: true, 
+        }) ).start()
+  
+    // Second interpolate beginning and end values (in this case 0 and 1)
+    return this.state.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    })
+  }
+
   renderAlbumContainer = () => {
     if (this.props.currentAlbum) {
       const albumName = this.props.currentAlbum.slice(0, this.props.currentAlbum.lastIndexOf("_"));
       return (
-        <View style={styles.item}>
+        <View style={styles.albumContainer}>
           <View style={styles.item}>
             <Image source={require('../../assets/circle-Al.png')} style={styles.ballImage} />
             {this.state.fontLoaded && <Text style={styles.index}>{this.props.picIndex}</Text>}
@@ -116,28 +138,45 @@ class HomeScreen extends Component {
       );
     }
     return (
-      <TouchableHighlight onPress={this.handlePressPlus} underlayColor="white">
-        <Icon name='ios-add-circle' size={40} />
+      <TouchableHighlight onPress={this.handlePressPlus} underlayColor="transparent" style={styles.plusBtn}>
+        <Image source={require('../../assets/addBtn.png')} style={styles.plusImage} />
       </TouchableHighlight>
     );
   }
-
+  
   renderDevelopingContainer = () => {
     //tres opcions NOTAVIAVBLE - AVIABLE - DEVELOPING
     if (this.props.developingAlbum) { //DEVELOPING
+      const developingAlbum = this.props.developingAlbum.slice(0, this.props.developingAlbum.lastIndexOf("_"));
+      const spinA = this.animateRotation(6000);
+      const spinB = this.animateRotation(4000);
       return (
-        <View style={styles.item}>
-          <Icon name='md-time' size={150} style={styles.icon} />
-          <Text style={styles.index}>2h</Text>
-          {this.props.developing && <Text>{albumName}</Text>}
+        <View style={styles.albumContainer}>
+          <View style={styles.item}>
+            <Animated.Image style={{
+              transform: [{rotate: spinA}], resizeMode: 'cover',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }} source={require('../../assets/circle-Al-a.png')} />
+            <Animated.Image style={{
+              transform: [{rotate: spinB}], resizeMode: 'cover',
+              position: 'absolute',
+              width: '100%',
+              height: '100%'
+            }} source={require('../../assets/circle-Al-b.png')} />
+            {/* <Image source={require('../../assets/devAl.gif')} style={styles.ballImage} /> */}
+            {/* <Text style={styles.devText}>{DEVELOPING_TIME[0]} {DEVELOPING_TIME[1]}</Text> */}
+            <Text style={styles.index}>36</Text>
+          </View>
+          <Text style={styles.text}>{developingAlbum}</Text>
+          <Text style={styles.text}>Developing...</Text>
         </View>
       );
     } else if (this.props.developingAviable) { //AVIABLE
       return (
         <TouchableHighlight onPress={this.handlePressStartDevelop} underlayColor="white" style={styles.btn}>
-          {/* <View style={styles.item}> */}
-            <Text style={styles.text}>Develop film</Text>
-          {/* </View> */}
+          <Text style={styles.text}>Develop film</Text>
         </TouchableHighlight>
       );
     }
@@ -154,10 +193,9 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <Image source={require('../../assets/bg.jpg')} style={styles.backgroundImage} />
-        {this.props.developingAlbum && <Text>Create a new album: </Text>}
         <View style={styles.subContainer}>
-        {this.renderAlbumContainer()}
-        {this.renderDevelopingContainer()}
+          {this.renderAlbumContainer()}
+          {this.renderDevelopingContainer()}
         </View>
       </View>
     );
@@ -195,7 +233,14 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-evenly', 
+    justifyContent: 'space-evenly',
+  },
+  albumContainer: {
+    width: 150,
+    height: 190,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
   },
   slideDefault: {
     flex: 1,
@@ -213,7 +258,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ballImage: {
-    backgroundColor: '#ccc',
     flex: 1,
     resizeMode: 'cover',
     position: 'absolute',
@@ -224,8 +268,13 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'rgb(255,255,255)',
-    fontSize: 20,    
-    fontFamily: 'MontserratAlternates-Light',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Light',
+  },
+  devText: {
+    color: '#7aa8af',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Light',
   },
   item: {
     width: 150,
@@ -236,20 +285,35 @@ const styles = StyleSheet.create({
   },
   index: {
     color: '#7aa8af',
-    fontSize: 60,
+    fontSize: 50,
     fontFamily: 'MontserratAlternates-Light',
   },
   icon: {
     flex: 1,
     position: 'absolute',
-    color: 'rgba(0, 0, 0, .1)'
+    color: 'rgba(255, 255, 255, .2)',
   },
   btn: {
     width: '50%',
     height: '8%',
-    backgroundColor: 'rgba(255, 255, 255, .2)',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, .4)',
     borderRadius: 10,
+    borderColor: 'rgba(255, 255, 255, .2)',
+    borderWidth: 4,
+  },
+  plusImage: {
+    width: '80%',
+    height: '80%',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    resizeMode: 'contain',
+  },
+  plusBtn: {
+    width: '20%',
+    height: '12%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

@@ -4,4 +4,4 @@ export const PHOTOS_DIR = FileSystem.documentDirectory + 'photos/';
 
 export const LIMIT_PICS = 4;
 
-export const DEVELOPING_TIME = [2, 'min'];
+export const DEVELOPING_TIME = [30, 'min'];
