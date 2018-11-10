@@ -99,10 +99,10 @@ class HomeScreen extends Component {
     if (this.props.expirationDate > new Date()) return;
     this.props.setExpirationDate(false);
     removeDataLocalStorage('expirationDate');
-    this.props.updateDevelopingAlbum(false);
+    (this.props.picIndex > LIMIT_PICS) ?  this.props.setDevelopingAviable(true) : null;
+    this.props.updateDevelopingAlbum(false)
     removeDataLocalStorage('developingAlbum');
     clearInterval(this.myInterval);
-    //TODO :if
   }
 
   renderAlbumContainer = () => {
