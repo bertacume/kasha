@@ -29,6 +29,7 @@ class RollScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image source={require('../../assets/bg-reversed.jpg')} style={styles.backgroundImage} />
         <View style={styles.wraper}>
           <FlatList
             data={this.props.albums}
@@ -60,10 +61,18 @@ const styles = StyleSheet.create({
     marginTop: 15,
     flexDirection: 'column',
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
   wraper: {
     flex: 1,
     marginTop: 10,
-    backgroundColor: 'rgb(255, 255, 255)',
+    // backgroundColor: 'rgb(255, 255, 255)',
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
@@ -79,8 +88,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     marginVertical: 5,
-    // marginHorizontal: 15,
-    // borderRadius:10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

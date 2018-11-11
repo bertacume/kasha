@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 
 export default class ImageItem extends Component {
   render() {
     return (
-      <View style={styles.image} source={{ uri: this.props.image }}>
-        <Icon name='md-time' size={96} style={styles.icon} />
+      <View style={styles.imageContainer}>
+        <Image source={{uri: this.props.imageSrc}} blurRadius={20} style={styles.ballImage} />        
         <Text style={styles.text}>{this.props.picIndex + 1}</Text>
       </View>
     );
@@ -15,19 +13,30 @@ export default class ImageItem extends Component {
 }
 
 const styles = StyleSheet.create({
-  image: {
+  imageContainer: {
     flex: 1,
     width: null,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   text: {
-    color: 'rgb(255, 255, 255)',
+    color: 'rgba(255, 255, 255, .5)',
     fontSize: 40,
+    fontFamily: 'MontserratAlternates-Light',
   },
   icon: {
     flex: 1,
     position: 'absolute',
     color: 'rgba(0, 0, 0, .1)'
-  }
+  },
+  ballImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    opacity: .5,
+    borderRadius: 10,
+  },
 });
