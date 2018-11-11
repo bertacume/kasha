@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 class RollScreen extends Component {
 
   componentWillMount = async () => {
-    
+
   };
 
   handlePress = (album) => {
@@ -17,13 +17,20 @@ class RollScreen extends Component {
 
   renderAlbum = album => {
     const albumName = album.slice(0, album.lastIndexOf("_"));
-    return <TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white">
-      <View style={styles.row}>
-        <Image source={{uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg'}} style={styles.thumbnail} />
-        <Text style={styles.title}>{albumName}</Text>
-        <Icon name='ios-arrow-forward' size={24} />
-      </View>
-      </TouchableHighlight>;
+    return <TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
+      {(this.props.currentAlbum === album) ?
+        <View style={styles.rowCurrentAlbum} >
+          <Image source={require('../../assets/film.png')} style={styles.rollThumbnail} />
+          <Text style={styles.titleCurrentAlbum}>{albumName.toUpperCase()}</Text>
+          {/* <Icon name='ios-arrow-forward' size={24} /> */}
+        </View> :
+        <View style={styles.row} >
+        <Image source={{ uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg' }} style={styles.thumbnail} />
+        <Text style={styles.title}>{albumName.toUpperCase()}</Text>
+        {/* <Icon name='ios-arrow-forward' size={24} /> */}
+      </View> 
+      }
+    </TouchableHighlight>;
   }
 
   render() {
@@ -46,6 +53,8 @@ class RollScreen extends Component {
 
 const mapStateToProps = (state) => ({
   albums: state.albums,
+  currentAlbum: state.currentAlbum,
+  developingAlbum: state.developingAlbum,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -76,32 +85,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
-  imageWrap: {
-    margin: 2,
-    padding: 2,
-    height: (Dimensions.get('window').height / 5) - 12,
-    width: (Dimensions.get('window').width / 3) - 4,
-    backgroundColor: '#62686d'
-  },
   row: {
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    marginVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#e3e7ef',
+    // height: (Dimensions.get('window').height / 5) - 12,
   },
   thumbnail: {
-    height: (Dimensions.get('window').height / 5) - 12,
-    width: (Dimensions.get('window').width / 3) - 4,
-    borderRadius:10
+    height: '100%',
+    width: (Dimensions.get('window').width) * 0.3,
+    resizeMode: 'cover',
+    borderWidth: 2,
+    borderColor: 'rgb(255, 255, 255)',
+    borderRadius: 10,
+  },
+  rowCurrentAlbum: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderColor: 'rgb(255, 255, 255)',
+    borderBottomWidth: 4,    
+    alignItems: 'center',
+  },
+  rollThumbnail: {
+    height: '70%',
+    width: '25%',
+    // height: (Dimensions.get('window').height)*0.2,
+    // width: (Dimensions.get('window').width)*0.2 ,
+    resizeMode: 'contain',
+  },
+  rowContainer: {
+    marginVertical: 5,
+    height: (Dimensions.get('window').height / 5),
+    backgroundColor: 'rgba(255, 255, 255, .5)',
   },
   title: {
     color: 'rgb(255, 255, 255)',
-    textTransform: 'uppercase',
     letterSpacing: 2,
-    paddingRight: 10
-  }
+    paddingRight: 10,    
+  },
+  titleCurrentAlbum: {
+    color: 'rgb(255, 255, 255)',
+    fontFamily: 'Montserrat-ExtraBold',
+    letterSpacing: 2,
+    paddingRight: 10,
+  },
 });
