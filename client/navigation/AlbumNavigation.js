@@ -1,6 +1,7 @@
 import { createStackNavigator } from 'react-navigation';
 import RollScreen from '../components/screens/RollScreen';
 import GalleryScreen from '../components/screens/GalleryScreen';
+import ImageSlider from '../components/screens/ImageSlider';
 
 const AlbumNavigation = createStackNavigator({
   Roll: { screen: RollScreen,
@@ -19,7 +20,12 @@ const AlbumNavigation = createStackNavigator({
         fontFamily: 'Montserrat-Regular',
       },
     } 
-  }},{
+  },
+  Slides: { screen: ImageSlider,
+    navigationOptions: {
+      header: null,
+    } 
+  }},  {
     initialroutename: 'Roll'
   }
 );

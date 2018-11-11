@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, FlatList, Image } from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, Image, TouchableHighlight } from 'react-native';
 import { FileSystem } from 'expo';
 import ImageItem from './ImageItem';
+import ImageSlider from '../screens/ImageSlider';
 import { PHOTOS_DIR } from '../../helpers/constants';
 
 
@@ -12,16 +13,22 @@ export default class ImageList extends Component {
 
   componentWillMount = async () => {
     const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.album);
-    this.setState({pictures: pics});
+    this.setState({ pictures: pics });
   };
+
+  handlePress = () => {
+    this.props.navigation.navigate('Slides');
+  }
 
   renderPhoto = fileName => {
     return <View key={fileName} style={styles.imageWrap}>
-      <ImageItem imageSrc={`${PHOTOS_DIR}${this.props.album}/${fileName}`} fileName={fileName} />
+      <TouchableHighlight onPress={() => this.handlePress(fileName)} underlayColor="transparent" style={styles.btn}>
+        <ImageItem imageSrc={`${PHOTOS_DIR}${this.props.album}/${fileName}`} fileName={fileName} />
+      </TouchableHighlight>
     </View>;
   }
 
-  render() {   
+  render() {
     return (
       <View style={styles.container}>
         <Image source={require('../../assets/bg-reversed.jpg')} style={styles.backgroundImage} />
@@ -33,7 +40,7 @@ export default class ImageList extends Component {
             keyExtractor={(item, index) => item}
             renderItem={({ item, separators }) => this.renderPhoto(item)}
           />
-          </View>
+        </View>
       </View>
     );
   }
@@ -69,5 +76,9 @@ const styles = StyleSheet.create({
     margin: 2,
     height: (Dimensions.get('window').height / 4) - 12,
     width: (Dimensions.get('window').width / 3) - 6,
-  }
+  },
+  btn: {
+   height: '100%',
+   width: '100%',
+  },
 });
