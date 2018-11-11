@@ -2,6 +2,7 @@ import { types } from '../actions/actionTypes';
 
 const initialState = {
   albums: [],
+  thumbnailPics: [],
   currentAlbum: false,
   developingAlbum: false,
   developingAviable: false,
@@ -21,6 +22,10 @@ const reducers = (state = initialState, action) => {
       });
       return {...state, albums: albums};
 
+    case types.FETCH_THUMBNAIL_PICS:
+      console.log('reducer thumbnailPics', action.thumbnailPics);
+      return {...state, thumbnailPics: action.thumbnailPics};
+
     case types.UPDATE_CURRENT_ALBUM:
       console.log('reducer current album', action.currentAlbum);
       return {...state, currentAlbum: action.currentAlbum};
@@ -39,6 +44,7 @@ const reducers = (state = initialState, action) => {
 
     case types.SET_PIC_INDEX:
       console.log('reducer set picIndex', action.picIndex);
+      console.log(state);
       return {...state, picIndex: action.picIndex};
       
       case types.INCREMENT_PIC_INDEX:

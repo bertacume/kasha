@@ -3,6 +3,8 @@ import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableHighlight
 import { connect } from 'react-redux';
 import { fetchAlbums, renderAlbum } from '../../actions/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { PHOTOS_DIR } from '../../helpers/constants';
+
 
 class RollScreen extends Component {
 
@@ -44,11 +46,12 @@ class RollScreen extends Component {
       </TouchableHighlight>
       );
     } 
+    // const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.album);
     return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
       <View style={styles.row} >
           <Image source={{ uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg' }} style={styles.thumbnail} blurRadius={2} />
           {/* <View style={styles.titleContainer}> */}
-            <Text style={styles.titleBasic}>{albumName.toUpperCase()}</Text>
+            <Text style={styles.titleBasic}>{albumName}</Text>
           {/* </View> */}
           <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
 
@@ -93,7 +96,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(RollScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 15,
     flexDirection: 'column',
   },
   backgroundImage: {
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
   },
   wraper: {
     flex: 1,
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: 'row',
     flexWrap: 'wrap'
   },

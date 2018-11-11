@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, TouchableHighlight, Image, Animated } from 'react-native';
 import { FileSystem } from 'expo';
-import { updateCurrentAlbum, setPicIndex, updateDevelopingAlbum, setDevelopingAviable, setExpirationDate, fetchAlbums } from '../../actions/actions';
+import { 
+  updateCurrentAlbum, 
+  setPicIndex, 
+  updateDevelopingAlbum, 
+  setDevelopingAviable, 
+  setExpirationDate, 
+  fetchAlbums, 
+  fetchThumbnailPics } from '../../actions/actions';
 import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/storageHelpers';
 import { renderAnimatedSpinners } from '../../helpers/animationHelpers';
 import { PHOTOS_DIR, LIMIT_PICS, DEVELOPING_TIME } from '../../helpers/constants';
@@ -32,6 +39,17 @@ class HomeScreen extends Component {
     //update store albums from local storage
     const albums = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.props.fetchAlbums(albums);
+
+    //update store thumbnails
+    if (albums && albums.length) {
+      const pics = await Promise.all(albums.map(async album => {
+        const alb = await FileSystem.readDirectoryAsync(PHOTOS_DIR + album);
+        const obj = {};
+        (alb && alb.length) ? obj[album] = alb[0] : obj[album] = null;
+        return obj;
+      }));
+      this.props.fetchThumbnailPics(pics);
+    }
 
     //update store current album from local storage
     await getFromLocalStorage('currentAlbum', this.props.updateCurrentAlbum);
@@ -69,7 +87,7 @@ class HomeScreen extends Component {
     await this.props.updateDevelopingAlbum(this.props.currentAlbum);
     storeDataLocalStorage('developingAlbum', this.props.currentAlbum);
     console.log('********dev ', this.props.developingAlbum);
-    
+
     await this.props.updateCurrentAlbum(false);
     removeDataLocalStorage('currentAlbum');
     console.log('********cu ', this.props.currentAlbum);
@@ -102,7 +120,7 @@ class HomeScreen extends Component {
     if (this.props.expirationDate > new Date()) return;
     this.props.setExpirationDate(false);
     removeDataLocalStorage('expirationDate');
-    (this.props.picIndex > LIMIT_PICS) ?  this.props.setDevelopingAviable(true) : null;
+    (this.props.picIndex > LIMIT_PICS) ? this.props.setDevelopingAviable(true) : null;
     this.props.updateDevelopingAlbum(false)
     removeDataLocalStorage('developingAlbum');
     clearInterval(this.myInterval);
@@ -187,6 +205,7 @@ const mapDispatchToProps = (dispatch) => ({
   setDevelopingAviable: (flag) => dispatch(setDevelopingAviable(flag)),
   setExpirationDate: (date) => dispatch(setExpirationDate(date)),
   fetchAlbums: (albums) => dispatch(fetchAlbums(albums)),
+  fetchThumbnailPics: (pics) => dispatch(fetchThumbnailPics(pics)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

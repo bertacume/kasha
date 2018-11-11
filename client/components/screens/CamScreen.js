@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import { incrementPicIndex, setDevelopingAviable } from '../../actions/actions';
+import { incrementPicIndex, setDevelopingAviable, fetchThumbnailPics } from '../../actions/actions';
 import { PHOTOS_DIR, LIMIT_PICS } from '../../helpers/constants';
 
 
@@ -39,10 +39,24 @@ class CamScreen extends Component {
   
   onPictureSaved = async photo => {
     //save pic in currentAlbum directory
+    const fileName = Date.now();
     await FileSystem.moveAsync({
       from: photo.uri,
-      to: `${PHOTOS_DIR}${this.props.currentAlbum}/${Date.now()}.jpg`,
+      to: `${PHOTOS_DIR}${this.props.currentAlbum}/${fileName}.jpg`,
     });
+    
+    //Save the pic if its the first one, in thumnail
+      if (this.props.picIndex === 1) {
+        console.log('QUI', this.props.currentAlbum, `${fileName}`);
+       const pic = {};
+       pic[this.props.currentAlbum] = `${fileName}`;
+       if (this.props.thumbnailPics && this.props.thumbnailPics.length) {
+        console.log('old', this.props.thumbnailPics);
+        this.props.fetchThumbnailPics([pic, ...this.props.thumbnailPics]); 
+      } 
+       else this.props.fetchThumbnailPics([pic]);
+       
+     }
 
   }
   
@@ -77,10 +91,12 @@ const mapStateToProps = (state) => ({
   developingAlbum: state.developingAlbum,
   developingAviable: state.developingAviable,
   picIndex: state.picIndex,
+  thumbnailPics: state.thumbnailPics,
 });
 const mapDispatchToProps = (dispatch) => ({
   incrementPicIndex: () => dispatch(incrementPicIndex()),
   setDevelopingAviable: (flag) => dispatch(setDevelopingAviable(flag)),
+  fetchThumbnailPics: (pics) => dispatch(fetchThumbnailPics(pics)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CamScreen);

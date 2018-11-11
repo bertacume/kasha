@@ -4,6 +4,11 @@ import { types } from '../actions/actionTypes';
 export const fetchAlbums = (albums) => ({
   type: types.FETCH_ALBUMS,
   albums
+}
+)
+export const fetchThumbnailPics = (thumbnailPics) => ({
+  type: types.FETCH_THUMBNAIL_PICS,
+  thumbnailPics
 })
 
 export const updateCurrentAlbum = (currentAlbum) => ({
