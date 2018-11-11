@@ -47,15 +47,12 @@ class CamScreen extends Component {
     
     //Save the pic if its the first one, in thumnail
       if (this.props.picIndex === 1) {
-        console.log('QUI', this.props.currentAlbum, `${fileName}`);
        const pic = {};
        pic[this.props.currentAlbum] = `${fileName}`;
        if (this.props.thumbnailPics && this.props.thumbnailPics.length) {
-        console.log('old', this.props.thumbnailPics);
         this.props.fetchThumbnailPics([pic, ...this.props.thumbnailPics]); 
       } 
        else this.props.fetchThumbnailPics([pic]);
-       
      }
 
   }

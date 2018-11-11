@@ -4,14 +4,12 @@ import { connect } from 'react-redux';
 import { fetchAlbums, renderAlbum } from '../../actions/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { PHOTOS_DIR } from '../../helpers/constants';
+const thumbPics = [
+
+];
 
 
 class RollScreen extends Component {
-
-  componentWillMount = async () => {
-
-  };
-
   handlePress = (album) => {
     this.props.renderAlbum(album);
     this.props.navigation.navigate('Album');
@@ -46,16 +44,16 @@ class RollScreen extends Component {
       </TouchableHighlight>
       );
     } 
-    // const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.album);
+    let thPic = null;
+    this.props.thumbnailPics.forEach(obj => {
+      console.log(obj, album);
+      if (obj[album]) thPic = obj[album];
+    });
     return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
       <View style={styles.row} >
-          <Image source={{ uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg' }} style={styles.thumbnail} blurRadius={2} />
-          {/* <View style={styles.titleContainer}> */}
+          {thPic && <Image source={{uri: `${PHOTOS_DIR}${album}/${thPic}`}} style={styles.thumbnail} blurRadius={2} />}
             <Text style={styles.titleBasic}>{albumName}</Text>
-          {/* </View> */}
           <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
-
-          {/* {`${PHOTOS_DIR}${this.props.album}/${fileName}`}  */}
         </View>
     </TouchableHighlight>
 
@@ -84,6 +82,7 @@ const mapStateToProps = (state) => ({
   albums: state.albums,
   currentAlbum: state.currentAlbum,
   developingAlbum: state.developingAlbum,
+  thumbnailPics: state.thumbnailPics,
 });
 
 const mapDispatchToProps = (dispatch) => ({
