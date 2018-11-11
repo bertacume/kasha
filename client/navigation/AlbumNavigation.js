@@ -12,7 +12,7 @@ const AlbumNavigation = createStackNavigator({
     navigationOptions: {
       title: 'Album',
       headerTransparent: true,
-      headerTitle: 'Darkroom',
+      // headerTitle: 'Al',
       headerTintColor: 'rgb(255, 255, 255)',
       headerTitleStyle: {
         fontWeight: '200',

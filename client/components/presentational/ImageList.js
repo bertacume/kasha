@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Dimensions, FlatList, Image } from 'react-native';
 import { FileSystem } from 'expo';
 import ImageItem from './ImageItem';
 import { PHOTOS_DIR } from '../../helpers/constants';
@@ -17,12 +17,15 @@ export default class ImageList extends Component {
 
   renderPhoto = fileName => {
     return <View key={fileName} style={styles.imageWrap}>
-      <ImageItem image={`${PHOTOS_DIR}${this.props.album}/${fileName}`} />
+      <ImageItem imageSrc={`${PHOTOS_DIR}${this.props.album}/${fileName}`} fileName={fileName} />
     </View>;
   }
 
   render() {   
     return (
+      <View style={styles.container}>
+        <Image source={require('../../assets/bg-reversed.jpg')} style={styles.backgroundImage} />
+        <View style={styles.subContainer}>
           <FlatList
             numColumns={3}
             data={this.state.pictures}
@@ -30,6 +33,8 @@ export default class ImageList extends Component {
             keyExtractor={(item, index) => item}
             renderItem={({ item, separators }) => this.renderPhoto(item)}
           />
+          </View>
+      </View>
     );
   }
 }
@@ -37,8 +42,21 @@ export default class ImageList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 25,
     flexDirection: 'column',
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  subContainer: {
+    flex: 1,
+    marginTop: 90,
+    flexDirection: 'column',
+    marginHorizontal: 2,
   },
   wraper: {
     flex: 1,
@@ -49,9 +67,7 @@ const styles = StyleSheet.create({
   },
   imageWrap: {
     margin: 2,
-    padding: 2,
-    height: (Dimensions.get('window').height / 5) - 12,
-    width: (Dimensions.get('window').width / 3) - 4,
-    backgroundColor: '#62686d'
+    height: (Dimensions.get('window').height / 4) - 12,
+    width: (Dimensions.get('window').width / 3) - 6,
   }
 });

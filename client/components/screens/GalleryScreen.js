@@ -7,8 +7,8 @@ class NewAlbumScreen extends Component {
 
   render() {
     return (this.props.renderAlbum === this.props.currentAlbum || this.props.renderAlbum === this.props.developingAlbum) 
-         ? <DevelopingList album={this.props.renderAlbum} />
-         : <ImageList album={this.props.renderAlbum} />
+         ? <DevelopingList album={this.props.renderAlbum} navigation={this.props.navigation} />
+         : <ImageList album={this.props.renderAlbum} navigation={this.props.navigation} />
   }
 }
 

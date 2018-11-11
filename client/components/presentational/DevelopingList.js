@@ -13,6 +13,8 @@ export default class ImageList extends Component {
   componentWillMount = async () => {
     const pics = await FileSystem.readDirectoryAsync(PHOTOS_DIR + this.props.album);
     this.setState({ pictures: pics });
+    console.log(this.props.navigation);
+    this.props.navigation.setParams({title: 'Darkroom' });
   };
 
   renderPhoto = (fileName, index) => {
