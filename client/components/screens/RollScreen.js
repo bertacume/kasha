@@ -17,20 +17,46 @@ class RollScreen extends Component {
 
   renderAlbum = album => {
     const albumName = album.slice(0, album.lastIndexOf("_"));
-    return <TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
-      {(this.props.currentAlbum === album) ?
+    if (this.props.developingAlbum === album) {
+      return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
+        <View style={styles.rowCurrentAlbum} >
+          <Image source={require('../../assets/film-dev.png')} style={styles.rollThumbnail} />
+          <View style={styles.textsView}>
+            <Text style={styles.title}>{albumName.toUpperCase()}</Text>
+            <Text style={styles.subTitle}>Developing...</Text>
+          </View>
+          <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
+        </View>
+      </TouchableHighlight>
+
+      );
+    };
+    if (this.props.currentAlbum === album) {
+      return ( <TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
         <View style={styles.rowCurrentAlbum} >
           <Image source={require('../../assets/film.png')} style={styles.rollThumbnail} />
-          <Text style={styles.titleCurrentAlbum}>{albumName.toUpperCase()}</Text>
-          {/* <Icon name='ios-arrow-forward' size={24} /> */}
-        </View> :
-        <View style={styles.row} >
-        <Image source={{ uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg' }} style={styles.thumbnail} />
-        <Text style={styles.title}>{albumName.toUpperCase()}</Text>
-        {/* <Icon name='ios-arrow-forward' size={24} /> */}
-      </View> 
-      }
-    </TouchableHighlight>;
+          <View style={styles.textsView}>
+            <Text style={styles.title}>{albumName.toUpperCase()}</Text>
+            <Text style={styles.subTitle}>Mounted Film</Text>
+          </View>
+          <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
+        </View>
+      </TouchableHighlight>
+      );
+    } 
+    return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
+      <View style={styles.row} >
+          <Image source={{ uri: 'https://static.wixstatic.com/media/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg/v1/fill/w_808,h_354,al_c,q_80,usm_0.66_1.00_0.01/2175dd_00a6e67d3bfc4af1ba9e9c423bd467f2~mv2.jpeg' }} style={styles.thumbnail} blurRadius={2} />
+          {/* <View style={styles.titleContainer}> */}
+            <Text style={styles.titleBasic}>{albumName.toUpperCase()}</Text>
+          {/* </View> */}
+          <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
+
+          {/* {`${PHOTOS_DIR}${this.props.album}/${fileName}`}  */}
+        </View>
+    </TouchableHighlight>
+
+    );
   }
 
   render() {
@@ -40,7 +66,7 @@ class RollScreen extends Component {
         <View style={styles.wraper}>
           <FlatList
             data={this.props.albums}
-            extraData={this.state}
+            extraData={this.props.developingAlbum}
             keyExtractor={(item, index) => item}
             renderItem={({ item, separators }) => this.renderAlbum(item)}
           />
@@ -81,26 +107,21 @@ const styles = StyleSheet.create({
   wraper: {
     flex: 1,
     marginTop: 10,
-    // backgroundColor: 'rgb(255, 255, 255)',
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
   row: {
     flex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // height: (Dimensions.get('window').height / 5) - 12,
   },
   thumbnail: {
     height: '100%',
     width: (Dimensions.get('window').width) * 0.3,
     resizeMode: 'cover',
-    borderWidth: 2,
-    borderColor: 'rgb(255, 255, 255)',
-    borderRadius: 10,
+    borderColor: 'rgba(255, 255, 255, .4)',
+    borderWidth: 6,
   },
   rowCurrentAlbum: {
     flex: 1,
@@ -108,15 +129,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderColor: 'rgb(255, 255, 255)',
-    borderBottomWidth: 4,    
     alignItems: 'center',
+    // borderColor: 'rgb(255, 255, 255)',
+    // borderBottomWidth: 4,    
   },
   rollThumbnail: {
+    marginHorizontal: 10,
     height: '70%',
     width: '25%',
-    // height: (Dimensions.get('window').height)*0.2,
-    // width: (Dimensions.get('window').width)*0.2 ,
     resizeMode: 'contain',
   },
   rowContainer: {
@@ -124,15 +144,36 @@ const styles = StyleSheet.create({
     height: (Dimensions.get('window').height / 5),
     backgroundColor: 'rgba(255, 255, 255, .5)',
   },
-  title: {
+  subTitle: {
     color: 'rgb(255, 255, 255)',
-    letterSpacing: 2,
-    paddingRight: 10,    
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'center',
   },
-  titleCurrentAlbum: {
-    color: 'rgb(255, 255, 255)',
+  titleContainer: {
+    height: '100%',
+    width: '20%',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  title: {
+    color: '#006e6c',
     fontFamily: 'Montserrat-ExtraBold',
     letterSpacing: 2,
-    paddingRight: 10,
+    // paddingRight: 10,
+  },
+  titleBasic: {
+    color: '#006e6c',
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: 2,
+    // paddingRight: 10,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  textsView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

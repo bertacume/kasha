@@ -68,9 +68,11 @@ class HomeScreen extends Component {
 
     await this.props.updateDevelopingAlbum(this.props.currentAlbum);
     storeDataLocalStorage('developingAlbum', this.props.currentAlbum);
-
-    this.props.updateCurrentAlbum(false);
+    console.log('********dev ', this.props.developingAlbum);
+    
+    await this.props.updateCurrentAlbum(false);
     removeDataLocalStorage('currentAlbum');
+    console.log('********cu ', this.props.currentAlbum);
 
     this.props.setDevelopingAviable(false);
 
