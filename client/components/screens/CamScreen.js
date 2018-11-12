@@ -11,8 +11,6 @@ import Dialog, { DialogButton, DialogContent, DialogTitle } from 'react-native-p
 const {height, width} = Dimensions.get('window');
 const newWidth = height*(3/4);
 const widthOffset = -((newWidth-width)/2);
-console.log('============', widthOffset);
-
 
 class CamScreen extends Component {
   state = {

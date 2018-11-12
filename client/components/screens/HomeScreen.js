@@ -28,6 +28,7 @@ class HomeScreen extends Component {
       'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
       'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
       'Montserrat-ExtraBold': require('../../assets/fonts/Montserrat-ExtraBold.ttf'),
+      'Arial': require('../../assets/fonts/Arial.ttf'),
     });
     this.setState({ fontLoaded: true });
     // Try to create a new directory 'photos'

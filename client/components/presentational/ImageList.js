@@ -16,13 +16,13 @@ export default class ImageList extends Component {
     this.setState({ pictures: pics });
   };
 
-  handlePress = () => {
-    this.props.navigation.navigate('Slides', { pictures: this.state.pictures, directory: PHOTOS_DIR + this.props.album});
+  handlePress = (index) => {
+    this.props.navigation.navigate('Slides', { pictures: this.state.pictures, position: index, directory: PHOTOS_DIR + this.props.album});
   }
 
-  renderPhoto = fileName => {
+  renderPhoto = (fileName, index) => {
     return <View key={fileName} style={styles.imageWrap}>
-      <TouchableHighlight onPress={() => this.handlePress(fileName)} underlayColor="transparent" style={styles.btn}>
+      <TouchableHighlight onPress={() => this.handlePress(index)} underlayColor="transparent" style={styles.btn}>
         <ImageItem imageSrc={`${PHOTOS_DIR}${this.props.album}/${fileName}`} fileName={fileName} />
       </TouchableHighlight>
     </View>;
@@ -38,7 +38,7 @@ export default class ImageList extends Component {
             data={this.state.pictures}
             extraData={this.state}
             keyExtractor={(item, index) => item}
-            renderItem={({ item, separators }) => this.renderPhoto(item)}
+            renderItem={({ item, index }) => this.renderPhoto(item, index)}
           />
         </View>
       </View>
