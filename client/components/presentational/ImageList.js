@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions, FlatList, Image, TouchableHighlight } from 'react-native';
 import { FileSystem } from 'expo';
 import ImageItem from './ImageItem';
-import ImageSlider from '../screens/ImageSlider';
+// import ImageSlider from '../screens/ImageSlider';
 import { PHOTOS_DIR } from '../../helpers/constants';
-
 
 export default class ImageList extends Component {
   state = {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Image, Text, TextInput, TouchableHighlight } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { updateCurrentAlbum, fetchAlbums } from '../../actions/actions';
 import { storeDataLocalStorage } from '../../helpers/storageHelpers';
 import { FileSystem } from 'expo';
