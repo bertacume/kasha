@@ -50,7 +50,7 @@ class RollScreen extends Component {
               <Image source={require('../../assets/film.png')} style={styles.rollThumbnail} />
               <View style={styles.textsView}>
                 <Text style={styles.title}>{albumName.toUpperCase()}</Text>
-                <Text style={styles.subTitle}>Mounted Film</Text>
+                <Text style={styles.subTitle}>Loaded Film</Text>
               </View>
               <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
             </View>

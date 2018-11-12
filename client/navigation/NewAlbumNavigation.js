@@ -10,7 +10,7 @@ const NewAlbumNavigation = createStackNavigator({
   },
   NewAlbum: { screen: NewAlbumScreen,
     navigationOptions: {
-      title: 'NewAlbum',
+      title: 'New Film',
       headerTransparent: true,
       headerTintColor: '#006e6c',
     } 
