@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Camera, Permissions, FileSystem } from 'expo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import { incrementPicIndex, setDevelopingAviable, fetchThumbnailPics } from '../../actions/actions';
 import { PHOTOS_DIR, LIMIT_PICS } from '../../helpers/constants';
 import Dialog, { DialogButton, DialogContent, DialogTitle } from 'react-native-popup-dialog';
+
+const {height, width} = Dimensions.get('window');
+const newWidth = height*(3/4);
+const widthOffset = -((newWidth-width)/2);
+console.log('============', widthOffset);
 
 
 class CamScreen extends Component {
@@ -80,11 +86,24 @@ class CamScreen extends Component {
 
   renderCamera() {
     return (
-      <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => { this.camera = ref; }}>
+      <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>
         <View style={styles.content}>
+        <Text>Cm</Text>
+
+            
           <View style={styles.bottomIcons}>
+            <TouchableOpacity>
+              <Icon name='md-flash' size={40} color={'rgb(255, 255, 255)'}/>
+            </TouchableOpacity>
             <TouchableOpacity onPress={this.takePicture}>
               <MaterialCommunityIcons name="camera-iris" style={styles.takePicBtn} />
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {
+                 this.setState({
+                   type: this.state.type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
+                 })
+               }}>
+              <Icon name='md-refresh' size={40} color={'rgb(255, 255, 255)'}/>
             </TouchableOpacity>
           </View>
           <Dialog
@@ -145,6 +164,14 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(CamScreen);
 
 const styles = StyleSheet.create({
+  camera: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    zIndex: 2,
+    left: widthOffset, 
+    right: widthOffset,
+  },
   header: {
     backgroundColor: 'transparent',
     left: 0,
@@ -164,17 +191,20 @@ const styles = StyleSheet.create({
     color: 'rgb(255,255,255)'
   },
   content: {
-    flexDirection: 'row',
-    flex: 2,
+    paddingTop: 30,
+    flexDirection: 'column',
+    flex: 1,
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginBottom: 15,
-    alignItems: 'flex-end'
+    alignItems: 'center',
   },
   bottomIcons: {
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center'
+    width: '100%',
+    paddingHorizontal: 40 + widthOffset * (-1),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   takePicBtn: {
     color: 'rgb(255,255,255)',
@@ -196,7 +226,6 @@ const styles = StyleSheet.create({
     color: 'rgb(122, 168, 175)',
     fontSize: 14,
     fontFamily: 'Montserrat-Regular',
-
   },
   blueText: {
     color: 'rgb(122, 168, 175)',
