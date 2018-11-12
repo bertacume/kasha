@@ -16,6 +16,7 @@ class CamScreen extends Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
+    flashMode: 0,
     visibleOK: false,
     visible: false,
     dialogContent: '',
@@ -84,13 +85,18 @@ class CamScreen extends Component {
 
   renderCamera() {
     return (
-      <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>
+      <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }} flashMode={this.state.flashMode}>
         <View style={styles.content}>
-        <Text>Cm</Text>
+        <Text></Text>
 
             
           <View style={styles.bottomIcons}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              console.log('flashMode', Camera.Constants.FlashMode);
+                 this.setState({
+                   flashMode: this.state.flashMode === 1 ? 0 : 1
+                 })
+               }}>
               <Icon name='md-flash' size={40} color={'rgb(255, 255, 255)'}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.takePicture}>
