@@ -12,7 +12,7 @@ const NewAlbumNavigation = createStackNavigator({
     navigationOptions: {
       title: 'NewAlbum',
       headerTransparent: true,
-      headerTintColor: 'rgb(255, 255, 255)',
+      headerTintColor: '#006e6c',
     } 
   },
 });

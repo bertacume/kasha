@@ -17,7 +17,7 @@ export default class ImageList extends Component {
   };
 
   handlePress = () => {
-    this.props.navigation.navigate('Slides');
+    this.props.navigation.navigate('Slides', { pictures: this.state.pictures, directory: PHOTOS_DIR + this.props.album});
   }
 
   renderPhoto = fileName => {

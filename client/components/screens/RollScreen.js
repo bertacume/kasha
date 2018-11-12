@@ -17,34 +17,6 @@ class RollScreen extends Component {
 
   renderAlbum = album => {
     const albumName = album.slice(0, album.lastIndexOf("_"));
-    if (this.props.developingAlbum === album) {
-      return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
-        <View style={styles.rowCurrentAlbum} >
-          <Image source={require('../../assets/film-dev.png')} style={styles.rollThumbnail} />
-          <View style={styles.textsView}>
-            <Text style={styles.title}>{albumName.toUpperCase()}</Text>
-            <Text style={styles.subTitle}>Developing...</Text>
-          </View>
-          <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
-        </View>
-      </TouchableHighlight>
-
-      );
-    };
-    if (this.props.currentAlbum === album) {
-      return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
-        <View style={styles.rowCurrentAlbum} >
-          <Image source={require('../../assets/film.png')} style={styles.rollThumbnail} />
-          <View style={styles.textsView}>
-            <Text style={styles.title}>{albumName.toUpperCase()}</Text>
-            <Text style={styles.subTitle}>Mounted Film</Text>
-          </View>
-          <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
-        </View>
-      </TouchableHighlight>
-      );
-    }
-
     let thPic = null;
     this.props.thumbnailPics.forEach(obj => {
       if (obj[album]) thPic = obj[album];
@@ -52,10 +24,10 @@ class RollScreen extends Component {
     return (<TouchableHighlight onPress={() => this.handlePress(album)} underlayColor="white" style={styles.rowContainer}>
       <View style={styles.row} >
         {thPic && <Image source={{ uri: `${PHOTOS_DIR}${album}/${thPic}` }} style={styles.thumbnail} blurRadius={2} />}
-        <View style={styles.albumNameContainer}>
-        <Text style={styles.titleBasic}>{albumName}</Text>
+        <View style={styles.alNameCont}>
+          <Icon name='md-folder' size={20} color={'rgba(255, 255, 255, .4)'} style={styles.icon} />
+          <Text style={styles.titleBasic}>{albumName}</Text>
         </View>
-        <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
       </View>
     </TouchableHighlight>
 
@@ -63,17 +35,49 @@ class RollScreen extends Component {
   }
 
   render() {
+    const albums = this.props.albums.filter(album => album !== this.props.currentAlbum && album !== this.props.developingAlbum);
+    let albumName = '';
+    let albumDevName = '';
+    this.props.currentAlbum ? albumName = this.props.currentAlbum.slice(0, this.props.currentAlbum.lastIndexOf("_")) : null;
+    this.props.developingAlbum ? albumDevName = this.props.developingAlbum.slice(0, this.props.developingAlbum.lastIndexOf("_")) : null;
     return (
       <View style={styles.container}>
+      <View style={styles.subContainer}>
         <Image source={require('../../assets/bg-reversed.jpg')} style={styles.backgroundImage} />
-        <View style={styles.wraper}>
+        {(this.props.currentAlbum) &&
+          <TouchableHighlight onPress={() => this.handlePress(this.props.currentAlbum)} underlayColor="white" style={styles.filmContainer}>
+            <View style={styles.rowCurrentAlbum} >
+              <Image source={require('../../assets/film.png')} style={styles.rollThumbnail} />
+              <View style={styles.textsView}>
+                <Text style={styles.title}>{albumName.toUpperCase()}</Text>
+                <Text style={styles.subTitle}>Mounted Film</Text>
+              </View>
+              <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
+            </View>
+          </TouchableHighlight>
+        }
+        {(this.props.developingAlbum) &&
+          <TouchableHighlight onPress={() => this.handlePress(this.props.developingAlbum)} underlayColor="white" style={styles.filmContainer}>
+            <View style={styles.rowCurrentAlbum} >
+              <Image source={require('../../assets/film-dev.png')} style={styles.rollThumbnail} />
+              <View style={styles.textsView}>
+                <Text style={styles.title}>{albumDevName.toUpperCase()}</Text>
+                <Text style={styles.subTitle}>Developing...</Text>
+              </View>
+              <Icon name='ios-arrow-forward' size={24} color={'#006e6c'} style={styles.icon} />
+            </View>
+          </TouchableHighlight>
+        }
+        <View style={styles.wraperRolls}>
           <FlatList
-            data={this.props.albums}
-            extraData={this.props.developingAlbum}
+            numColumns={2}
+            data={albums}
+            extraData={this.props}
             keyExtractor={(item, index) => item}
             renderItem={({ item, separators }) => this.renderAlbum(item)}
           />
         </View>
+      </View>
       </View>
     );
   }
@@ -98,6 +102,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  container: {
+    flex: 1,
+    paddingTop: 25,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   backgroundImage: {
     flex: 1,
@@ -107,17 +118,24 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
-  wraper: {
+  wraperRolls: {
     flex: 1,
-    marginTop: 20,
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
   row: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginVertical: 2,
+  },
+  alNameCont: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, .4)',
   },
   albumNameContainer: {
     flex: 1,
@@ -126,13 +144,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderLeftWidth: 8,
-    borderLeftColor: 'rgba(255, 255, 255, .5)',
   },
   thumbnail: {
     height: '100%',
-    width: (Dimensions.get('window').width) * 0.3,
+    width: '100%',
     resizeMode: 'cover',
+    position: 'absolute',
   },
   rowCurrentAlbum: {
     flex: 1,
@@ -149,12 +166,18 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   rowContainer: {
+    marginHorizontal: 4,
+    height: (Dimensions.get('window').height / 5),
+    width: (Dimensions.get('window').width / 2 - 8),
+  },
+  filmContainer: {
     marginVertical: 5,
+    width: Dimensions.get('window').width,
     height: (Dimensions.get('window').height / 5),
     backgroundColor: 'rgba(255, 255, 255, .5)',
   },
   subTitle: {
-    color: 'rgb(255, 255, 255)',
+    color: '#006e6c',
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
   },

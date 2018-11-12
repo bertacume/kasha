@@ -18,7 +18,6 @@ export default class ImageItem extends Component {
     const { imageSrc, fileName } =  this.props;
     const name = fileName.slice(0, fileName.lastIndexOf('.'));
     const date = new Date(parseInt(name));
-    console.log(date.yyyymmdd());
     return (
       <View style={styles.imageContainer}>
       <Image
