@@ -28,6 +28,8 @@ class HomeScreen extends Component {
       'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
       'Montserrat-Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
       'Montserrat-ExtraBold': require('../../assets/fonts/Montserrat-ExtraBold.ttf'),
+      'Ailerons-Typeface': require('../../assets/fonts/Ailerons-Typeface.ttf'),
+      'Adam': require('../../assets/fonts/Adam.ttf'),
     });
     this.setState({ fontLoaded: true });
     // Try to create a new directory 'photos'
@@ -86,11 +88,9 @@ class HomeScreen extends Component {
 
     await this.props.updateDevelopingAlbum(this.props.currentAlbum);
     storeDataLocalStorage('developingAlbum', this.props.currentAlbum);
-    console.log('********dev ', this.props.developingAlbum);
 
     await this.props.updateCurrentAlbum(false);
     removeDataLocalStorage('currentAlbum');
-    console.log('********cu ', this.props.currentAlbum);
 
     this.props.setDevelopingAviable(false);
 
@@ -171,7 +171,7 @@ class HomeScreen extends Component {
     //NOT AVIABLE
     return (
       <View style={styles.item}>
-        <Text> DEV. NOT AVIAVBLE</Text>
+        {/* <Text> DEV. NOT AVIAVBLE</Text> */}
       </View>
     );
   }
@@ -181,6 +181,7 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <Image source={require('../../assets/bg.jpg')} style={styles.backgroundImage} />
+        {this.state.fontLoaded && <Text style={styles.logo}>KASHA</Text>}
         <View style={styles.subContainer}>
           {this.renderAlbumContainer()}
           {this.renderDevelopingContainer()}
@@ -218,11 +219,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subContainer: {
-    height: '100%',
+    flex: 1,
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+  },
+  logo: {
+    paddingTop: 70,
+    color: 'rgb(255, 255, 255)',
+    fontSize: 15,
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: 8,
   },
   albumContainer: {
     width: 150,
