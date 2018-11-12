@@ -30,4 +30,4 @@ const AlbumNavigation = createStackNavigator({
   }
 );
 
-export default AlbumNavigation;
+export default AlbumNavigation;4
