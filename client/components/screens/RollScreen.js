@@ -77,6 +77,7 @@ class RollScreen extends Component {
           <Text style={styles.galleryText}>{('Developed Films').toUpperCase()}</Text>
           <Icon name='ios-arrow-down' size={24} color={'rgb(255, 255, 255)'}/>
           </View>}       
+          {this.props.fontsLoaded && !albums && <Text style={styles.subTitleAlbums}>{('No films yet').toUpperCase()}</Text>}
         <View style={styles.wraperRolls}>
           <FlatList
             numColumns={2}
@@ -190,6 +191,12 @@ const styles = StyleSheet.create({
     color: '#006e6c',
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
+  },
+  subTitleAlbums: {
+    color: '#006e6c',
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'left',
+    padding: 10,
   },
   titleContainer: {
     height: '100%',

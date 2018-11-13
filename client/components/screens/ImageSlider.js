@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, TouchableHighlight, CameraRoll } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Permissions } from 'expo';
 import Swiper from 'react-native-swiper';
 import Dialog, { DialogButton, DialogContent } from 'react-native-popup-dialog';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,8 +9,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 export default class ImageItem extends Component {
   state = {
+    hasCameraPermission: null,    
     visible: false,
   }
+
+  async componentDidMount () {
+    //Get camera permissions
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    this.setState({ hasCameraPermission: status === 'granted' });
+  }
+
   handlePress = async (pic, directory) => {
     await CameraRoll.saveToCameraRoll(`${directory}/${pic}`);
     this.setState({ visible: true });
@@ -94,7 +103,7 @@ const styles = StyleSheet.create({
   },
   dialogContainer: {
     alignItems: 'center',
-    height: '20%',
+    height: '15%',
     backgroundColor: 'rgb(255, 255, 255)',
     marginHorizontal: 20,
   },

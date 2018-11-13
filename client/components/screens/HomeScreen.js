@@ -132,6 +132,7 @@ class HomeScreen extends Component {
       const albumName = this.props.currentAlbum.slice(0, this.props.currentAlbum.lastIndexOf("_"));
       return (
         <View style={styles.albumContainer}>
+          {this.props.currentAlbum && <Text style={styles.textMax}>Max pics: {LIMIT_PICS}</Text>}
           <View style={styles.item}>
             <Image source={require('../../assets/circle-Al.png')} style={styles.ballImage} />
             {this.state.fontLoaded && <Text style={styles.index}>{this.props.picIndex}</Text>}
@@ -270,6 +271,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Montserrat-Light',
   },
+  textMax: {
+    marginBottom: 10,
+    color: 'rgb(255,255,255)',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Light',
+  },
   devText: {
     color: '#7aa8af',
     fontSize: 14,
@@ -285,6 +292,11 @@ const styles = StyleSheet.create({
   index: {
     color: '#7aa8af',
     fontSize: 50,
+    fontFamily: 'MontserratAlternates-Light',
+  },
+  indexLimit: {
+    color: '#7aa8af',
+    fontSize: 20,
     fontFamily: 'MontserratAlternates-Light',
   },
   icon: {

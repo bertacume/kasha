@@ -29,7 +29,7 @@ class CamScreen extends Component {
   }
 
   popDialogOK = () => {
-    this.setState({ dialogContent: `You reached ${LIMIT_PICS}, develop the film` });
+    this.setState({ dialogContent: `No pictures left. Develop the film` });
     this.setState({ visibleOK: true });
   }
 
@@ -37,7 +37,7 @@ class CamScreen extends Component {
     //check if it has already reached 36 pics
     //TODO: notif. you cant take more pics till you start developing
     if (!this.props.currentAlbum) {
-      this.setState({ dialogContent: `You don't have any film loaded` });
+      this.setState({ dialogContent: `Load a film` });
       this.setState({ visibleOK: true });
       // setTimeout(() => this.setState({ visible: false }), 4000);
       return;
@@ -51,7 +51,9 @@ class CamScreen extends Component {
     await this.props.incrementPicIndex();
 
     if (this.camera) {
-      this.setState({ dialogContent: `${LIMIT_PICS - this.props.picIndex} left` });
+      let str = 'picture';
+      if (LIMIT_PICS - this.props.picIndex !== 1) str += 's';
+      this.setState({ dialogContent: `${LIMIT_PICS - this.props.picIndex} ${str} left` });
       this.setState({ visible: true });
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
     }
@@ -88,7 +90,6 @@ class CamScreen extends Component {
       <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }} flashMode={this.state.flashMode}>
         <View style={styles.content}>
         <Text></Text>
-
             
           <View style={styles.bottomIcons}>
             <TouchableOpacity onPress={() => {
@@ -110,15 +111,17 @@ class CamScreen extends Component {
               <Icon name='md-refresh' size={40} color={'rgb(255, 255, 255)'}/>
             </TouchableOpacity>
           </View>
+
           <Dialog
             visible={this.state.visible}
-            dialogTitle={<DialogTitle textStyle={styles.blueText} title='Winding the film' />}
+            // dialogTitle={<DialogTitle textStyle={styles.blueText} title='Winding the film' />}
             dialogStyle={styles.dialogContainer}
           >
             <DialogContent style={styles.dialogContent} >
-              <Text style={styles.dialogText}>{this.state.dialogContent}</Text>
+              <Text style={styles.picsLeftText}>{this.state.dialogContent}</Text>
             </DialogContent>
           </Dialog>
+
           <Dialog
             visible={this.state.visibleOK}
             actions={[
@@ -158,6 +161,7 @@ const mapStateToProps = (state) => ({
   developingAviable: state.developingAviable,
   picIndex: state.picIndex,
   thumbnailPics: state.thumbnailPics,
+  loadedFilms: state.loadedFilms,
 });
 const mapDispatchToProps = (dispatch) => ({
   incrementPicIndex: () => dispatch(incrementPicIndex()),
@@ -216,7 +220,8 @@ const styles = StyleSheet.create({
   },
   dialogContainer: {
     alignItems: 'center',
-    height: '20%',
+    height: '15%',
+    width: '80%',
     backgroundColor: 'rgb(255, 255, 255)',
     marginHorizontal: 20,
   },
@@ -233,5 +238,12 @@ const styles = StyleSheet.create({
   },
   blueText: {
     color: 'rgb(122, 168, 175)',
+  },
+  picsLeftText: {
+    paddingTop: 20,
+    color: 'rgb(122, 168, 175)',
+    fontFamily: 'Montserrat-ExtraBold',
+    letterSpacing: 2,
+    fontSize: 20,
   },
 });
