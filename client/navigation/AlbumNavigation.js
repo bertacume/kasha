@@ -11,9 +11,8 @@ const AlbumNavigation = createStackNavigator({
   },
   Album: { screen: GalleryScreen,
     navigationOptions: {
-      title: 'Album',
+      title: 'Film',
       headerTransparent: true,
-      // headerTitle: 'Al',
       headerTintColor: 'rgb(255, 255, 255)',
       headerTitleStyle: {
         fontWeight: '200',

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, TouchableHighlight, CameraRoll } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
-import Dialog, { DialogButton, DialogContent, DialogTitle } from 'react-native-popup-dialog';
+import Dialog, { DialogButton, DialogContent } from 'react-native-popup-dialog';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   dialogContent: {
-    // height: 50,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',

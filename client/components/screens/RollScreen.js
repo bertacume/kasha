@@ -4,13 +4,9 @@ import { connect } from 'react-redux';
 import { fetchAlbums, renderAlbum } from '../../actions/actions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { PHOTOS_DIR } from '../../helpers/constants';
-const thumbPics = [
-
-];
-
 
 class RollScreen extends Component {
-  handlePress = (album) => {
+    handlePress = (album) => {
     this.props.renderAlbum(album);
     this.props.navigation.navigate('Album');
   }

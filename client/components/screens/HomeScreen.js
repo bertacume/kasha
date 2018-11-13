@@ -23,8 +23,6 @@ class HomeScreen extends Component {
   myInterval = null
 
   async componentWillMount() {
-    console.log(PHOTOS_DIR);
-    
     await Font.loadAsync({
       'MontserratAlternates-Light': require('../../assets/fonts/MontserratAlternates-Light.ttf'),
       'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),

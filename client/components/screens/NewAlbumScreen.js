@@ -42,7 +42,7 @@ class NewAlbumScreen extends Component {
       <View style={styles.container}>
         <Image source={require('../../assets/bg-blur.jpg')} style={styles.backgroundImage} />
         <View style={styles.content}>
-          <Text>{this.state.emptyMssg}</Text>
+          <Text style={styles.mssge}>{this.state.emptyMssg}</Text>
           <Text style={styles.text}>Title</Text>
           <TextInput
             style={styles.input}
@@ -111,6 +111,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
     fontFamily: 'Montserrat-Light',
+  },
+  mssge: {
+    color: '#e98650',
+    alignSelf: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    fontFamily: 'Montserrat-Regular',
   },
   touch: {
     borderRadius: 50,
