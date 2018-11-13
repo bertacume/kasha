@@ -1,6 +1,7 @@
 import { types } from '../actions/actionTypes';
 
 const initialState = {
+  fontsLoaded: false,
   albums: [],
   thumbnailPics: [],
   currentAlbum: false,
@@ -12,6 +13,8 @@ const initialState = {
 
 const reducers = (state = initialState, action) => {
   switch (action.type) {
+    case types.FONTS_LOADED:
+    return {...state, fontsLoaded: action.fontsLoaded};
     case types.FETCH_ALBUMS:
       console.log('reducer albums', action.albums);
       const albums = action.albums;

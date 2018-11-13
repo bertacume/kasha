@@ -30,6 +30,15 @@ class RollScreen extends Component {
     );
   }
 
+  renderTitle = () => {
+     setTimeout(() => {
+      return (<View>
+          <Text style={styles.title}>{('Developed Films').toUpperCase()}</Text>
+      </View>
+      );
+    }, 1000);
+  }
+
   render() {
     const albums = this.props.albums.filter(album => album !== this.props.currentAlbum && album !== this.props.developingAlbum);
     let albumName = '';
@@ -64,6 +73,10 @@ class RollScreen extends Component {
             </View>
           </TouchableHighlight>
         }
+        {this.props.fontsLoaded && <View style={styles.titleGalleryWrapper}>
+          <Text style={styles.galleryText}>{('Developed Films').toUpperCase()}</Text>
+          <Icon name='ios-arrow-down' size={24} color={'rgb(255, 255, 255)'}/>
+          </View>}       
         <View style={styles.wraperRolls}>
           <FlatList
             numColumns={2}
@@ -85,6 +98,7 @@ const mapStateToProps = (state) => ({
   currentAlbum: state.currentAlbum,
   developingAlbum: state.developingAlbum,
   thumbnailPics: state.thumbnailPics,
+  fontsLoaded: state.fontsLoaded,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -202,4 +216,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  galleryText: {
+    color: 'rgb(255, 255, 255)',
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: 2,
+    marginRight: 10,
+  },
+  titleGalleryWrapper: {
+    padding: 10,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
 });

@@ -1,6 +1,11 @@
 import { types } from '../actions/actionTypes';
 
 
+export const fontsLoaded = (fontsLoaded) => ({
+  type: types.FONTS_LOADED,
+  fontsLoaded
+}
+)
 export const fetchAlbums = (albums) => ({
   type: types.FETCH_ALBUMS,
   albums

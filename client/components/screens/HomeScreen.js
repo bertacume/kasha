@@ -9,7 +9,8 @@ import {
   setDevelopingAviable, 
   setExpirationDate, 
   fetchAlbums, 
-  fetchThumbnailPics } from '../../actions/actions';
+  fetchThumbnailPics, 
+  fontsLoaded} from '../../actions/actions';
 import { getFromLocalStorage, storeDataLocalStorage, removeDataLocalStorage } from '../../helpers/storageHelpers';
 import { renderAnimatedSpinners } from '../../helpers/animationHelpers';
 import { PHOTOS_DIR, LIMIT_PICS, DEVELOPING_TIME } from '../../helpers/constants';
@@ -31,6 +32,7 @@ class HomeScreen extends Component {
       'Arial': require('../../assets/fonts/Arial.ttf'),
     });
     this.setState({ fontLoaded: true });
+    this.props.fontsLoaded(true);
     // Try to create a new directory 'photos'
     console.log('bye', PHOTOS_DIR);
     await FileSystem.makeDirectoryAsync(PHOTOS_DIR).catch(e => {
@@ -206,6 +208,7 @@ const mapDispatchToProps = (dispatch) => ({
   setExpirationDate: (date) => dispatch(setExpirationDate(date)),
   fetchAlbums: (albums) => dispatch(fetchAlbums(albums)),
   fetchThumbnailPics: (pics) => dispatch(fetchThumbnailPics(pics)),
+  fontsLoaded: (pics) => dispatch(fontsLoaded(pics)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
