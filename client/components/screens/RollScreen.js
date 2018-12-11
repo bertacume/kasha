@@ -47,8 +47,8 @@ class RollScreen extends Component {
     this.props.developingAlbum ? albumDevName = this.props.developingAlbum.slice(0, this.props.developingAlbum.lastIndexOf("_")) : null;
     return (
       <View style={styles.container}>
-      <View style={styles.subContainer}>
         <Image source={require('../../assets/bg-reversed.jpg')} style={styles.backgroundImage} />
+      <View style={styles.subContainer}>
         {(this.props.currentAlbum) &&
           <TouchableHighlight onPress={() => this.handlePress(this.props.currentAlbum)} underlayColor="white" style={styles.filmContainer}>
             <View style={styles.rowCurrentAlbum} >
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
-  container: {
+  subContainer: {
     flex: 1,
     paddingTop: 25,
     flexDirection: 'column',
