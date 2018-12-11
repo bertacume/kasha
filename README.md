@@ -5,7 +5,7 @@ Miss the days when taking a picture was special question mark. Bring the excitem
 ## Screenshots
 
 <p align="center">
-<img src="../client/assets/first.jpg" width="800px"> &nbsp;&nbsp;
+<img src="./client/assets/first.jpg" width="800px"> &nbsp;&nbsp;
 </p>
 
 ## Installation
