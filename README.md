@@ -1,4 +1,4 @@
-## KASHA
+## KASHA - カシャ
 
 Miss the days when taking a picture was special question mark. Bring the excitement of analogphotography back to your next trip with Kasha. 
 
@@ -7,6 +7,7 @@ Miss the days when taking a picture was special question mark. Bring the excitem
 <p align="center">
 <img src="../client/assets/first.jpg" width="800px"> &nbsp;&nbsp;
 </p>
+
 ## Installation
 
 1. Clone the repo to your local machine
@@ -29,7 +30,7 @@ expo start
 
 ## Tech Stack
 
-* <a href="https://expo.io">React</a>
+- <a href="https://expo.io">React</a>
 
 - <a href="https://facebook.github.io/react-native/">React Native</a>
 
