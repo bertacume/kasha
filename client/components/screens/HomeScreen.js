@@ -117,14 +117,24 @@ class HomeScreen extends Component {
     storeDataLocalStorage('expirationDate', expirationDate);
   }
 
-  checkTimer = () => {
+  checkTimer = async () => {
     if (this.props.expirationDate > new Date()) return;
+    const pics = await Promise.all(this.props.albums.map(async album => {
+      const alb = await FileSystem.readDirectoryAsync(PHOTOS_DIR + album);
+      const obj = {};
+      (alb && alb.length) ? obj[album] = alb[0] : obj[album] = null;
+      return obj;
+    }));
+    console.log(pics);
+    this.props.fetchThumbnailPics(pics);
     this.props.setExpirationDate(false);
     removeDataLocalStorage('expirationDate');
     (this.props.picIndex > LIMIT_PICS) ? this.props.setDevelopingAviable(true) : null;
     this.props.updateDevelopingAlbum(false)
     removeDataLocalStorage('developingAlbum');
     clearInterval(this.myInterval);
+    
+    
   }
 
   renderAlbumContainer = () => {
@@ -184,6 +194,7 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <Image source={require('../../assets/bg.jpg')} style={styles.backgroundImage} />
         {this.state.fontLoaded && <Text style={styles.logo}>KASHA</Text>}
+        {this.state.fontLoaded && <Text style={styles.logoJapanese}>カシャ</Text>}
         <View style={styles.subContainer}>
           {this.renderAlbumContainer()}
           {this.renderDevelopingContainer()}
@@ -199,6 +210,7 @@ const mapStateToProps = (state) => ({
   picIndex: state.picIndex,
   developingAviable: state.developingAviable,
   expirationDate: state.expirationDate,
+  albums: state.albums,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -230,6 +242,12 @@ const styles = StyleSheet.create({
   },
   logo: {
     paddingTop: 70,
+    color: 'rgb(255, 255, 255)',
+    fontSize: 15,
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: 8,
+  },
+  logoJapanese: {
     color: 'rgb(255, 255, 255)',
     fontSize: 15,
     fontFamily: 'Montserrat-Regular',
